@@ -1,0 +1,70 @@
+{
+  "id": "grillspyd",
+  "nr": "№ 03",
+  "navn": "Grillspyd med crack-saus",
+  "undertittel": "Den sausen du kommer til å dyppe alt i, også det som ikke trenger dipp",
+  "kategori": "Hovedrett",
+  "tid": "3 t (med marinering)",
+  "porsjoner": 4,
+  "vanskelighet": "Middels",
+  "smak": "Syrlig, salt, søt, umami",
+  "ingress": "Thai-inspirerte spyd som får en gyllen skorpe på grillen og en crack-saus som lever opp til navnet. Syltet agurk-salat på siden gjør det hele til en treenighet du vil lage igjen neste uke.",
+  "illustrasjon": "tallerken",
+  "ingredienser": [
+    {
+      "gruppe": "Grillspyd",
+      "rader": [
+        { "m": 1, "e": "kg", "n": "nakkekoteletter, skåret i skiver" },
+        { "m": 4, "e": "stk", "n": "hvitløksfedd, revet" },
+        { "m": 0.5, "e": "bunt", "n": "koriander, finhakket" },
+        { "m": 2, "e": "ss", "n": "brunt sukker" },
+        { "m": 2, "e": "ss", "n": "fiskesaus" },
+        { "m": 2, "e": "ss", "n": "soyasaus" },
+        { "m": 2, "e": "ss", "n": "østerssaus" },
+        { "m": 1, "e": "ts", "n": "bakepulver" },
+        { "m": 1.5, "e": "dl", "n": "kokosmelk" },
+        { "m": 1, "e": "klype", "n": "salt og pepper" }
+      ]
+    },
+    {
+      "gruppe": "Syltet thaisalat",
+      "rader": [
+        { "m": 1, "e": "stk", "n": "agurk, grovhakket" },
+        { "m": 2, "e": "stk", "n": "sjalottløk, finhakket" },
+        { "m": 0.5, "e": "bunt", "n": "koriander" },
+        { "m": 0.5, "e": "dl", "n": "riseddik" },
+        { "m": 0.5, "e": "dl", "n": "sukker" },
+        { "m": 1, "e": "ts", "n": "salt" }
+      ]
+    },
+    {
+      "gruppe": "Crack-saus",
+      "rader": [
+        { "m": 5, "e": "ss", "n": "fiskesaus" },
+        { "m": 3, "e": "ss", "n": "limejuice" },
+        { "m": 3, "e": "ss", "n": "tamarind-paste" },
+        { "m": 3, "e": "ss", "n": "brunt sukker" },
+        { "m": 3, "e": "ss", "n": "koriander, hakket" },
+        { "m": 2, "e": "ss", "n": "vårløk, hakket" },
+        { "m": 2, "e": "ts", "n": "rispulver (helst av sticky rice)" },
+        { "m": 1, "e": "stk", "n": "sjalottløk, hakket" }
+      ]
+    },
+    {
+      "gruppe": "Til servering",
+      "rader": [
+        { "m": 4, "e": "dl", "n": "ris" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Mariner kjøttet", "d": "Bland kjøttskivene med revet hvitløk, koriander, brunt sukker, fiskesaus, soyasaus, østerssaus, kokosmelk, bakepulver, salt og pepper. La det stå i kjøleskapet i 2–3 timer, eller helst over natta. Bakepulveret gjør overflaten mør og gyllen på grillen." },
+    { "t": "Sylt thaisalaten", "d": "Bland agurk, sjalottløk, koriander, riseddik, sukker og salt i en bolle. La godgjøre seg i kjøleskapet frem til servering — minst 30 minutter." },
+    { "t": "Lag rispulver", "d": "Stek 3 ts riskorn (sticky rice er best, jasminris funker) i en tørr panne på middels varme til de er gyllenbrune. Knus i morter til fint pulver, eller kjør raskt i en blender. Sett til side." },
+    { "t": "Rør crack-sausen", "d": "Visp sammen limejuice, fiskesaus, tamarind-paste og brunt sukker til sukkeret er helt oppløst. Vend inn koriander, vårløk og sjalottløk, og topp med rispulveret helt til slutt." },
+    { "t": "Tre på spyd", "d": "Tre kjøttet på grillspyd. Pensle med litt av marinaden. Forvarm grillen godt — den skal være høy varme fra start." },
+    { "t": "Grill og server", "d": "Grill spydene i ca. 3–4 minutter per side, til kjøttet har fått gyllen farge og er gjennomstekt. Server med ris, crack-saus og syltet thaisalat på siden." }
+  ],
+  "servering": "Med dampet ris, en generøs skvett crack-saus og en frisk haug syltet thaisalat ved siden av.",
+  "par": "Kald pils, eller en lett og litt søt riesling om du vil matche syrligheten i sausen."
+}
