@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<title>God Matsmak — Mat som smaker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #EFE8DA; }
+  body {
+    font-family: "Space Grotesk", sans-serif;
+    color: #2A1D14;
+    -webkit-font-smoothing: antialiased;
+  }
+  * { box-sizing: border-box; }
+  button:focus, input:focus { outline: 2px solid #8B2D1F; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+// ---------- data ----------
+const GM_RECIPES = [
+  {
+    id: 'kjottkaker',
+    nr: '№ 01',
+    navn: 'Kjøttkaker i brun saus',
+    undertittel: 'Den som smaker som mormor, bare litt frekkere',
+    kategori: 'Hovedrett',
+    tid: '55 min',
+    porsjoner: 4,
+    vanskelighet: 'Enkel',
+    smak: 'Salt, umami, litt søt',
+    ingress:
+      'Det finnes kjøttkaker, og så finnes det KJØTTKAKER. Disse er den siste sorten. Sausen er brun som en norsk novembermorgen og dobbelt så koselig.',
+    ingredienser: [
+      { gruppe: 'Kjøttkakene', rader: [
+        { m: 500, e: 'g', n: 'kjøttdeig av storfe' },
+        { m: 1, e: 'dl', n: 'melk' },
+        { m: 2, e: 'ss', n: 'potetmel' },
+        { m: 1, e: 'stk', n: 'egg' },
+        { m: 1, e: 'ts', n: 'salt' },
+        { m: 0.5, e: 'ts', n: 'malt ingefær' },
+        { m: 0.5, e: 'ts', n: 'muskatnøtt' },
+        { m: 0.25, e: 'ts', n: 'pepper' },
+      ]},
+      { gruppe: 'Brun saus', rader: [
+        { m: 3, e: 'ss', n: 'smør' },
+        { m: 3, e: 'ss', n: 'hvetemel' },
+        { m: 6, e: 'dl', n: 'kjøttkraft' },
+        { m: 1, e: 'ss', n: 'sukkerkulør' },
+        { m: 1, e: 'ts', n: 'soyasaus' },
+      ]},
+    ],
+    steg: [
+      { t: 'Elte deigen', d: 'Bland kjøttdeig med salt og krydder. La stå 5 min — saltet trekker ut proteinene, og det er derfor kakene blir saftige, ikke tørre.' },
+      { t: 'Spe med væske', d: 'Tilsett potetmel, egg og melk litt etter litt. Deigen skal være myk, men holde formen.' },
+      { t: 'Form og brun', d: 'Form kjøttkaker på størrelse med en plomme. Stek i smør til de er gyllenbrune på begge sider.' },
+      { t: 'Lag sausen', d: 'Smelt smør, rør inn mel og la boble et halvt minutt. Spe med kraft mens du visper. Smak til med sukkerkulør og soya.' },
+      { t: 'Trekk sammen', d: 'Legg kjøttkakene i sausen, la dem trekke i 10 min på svak varme. Smaken får satt seg.' },
+    ],
+    servering: 'Med kokte poteter, tyttebær og ertestuing. Og masse saus. Mer saus enn du tror er lov.',
+    par: 'Et glass pilsner eller et glass melk, etter dagsform.',
+  },
+  {
+    id: 'fiskegrateng',
+    nr: '№ 02',
+    navn: 'Fiskegrateng med sprø topp',
+    undertittel: 'Kantina på skolen tok feil — dette er noe helt annet',
+    kategori: 'Hovedrett',
+    tid: '1 t 10 min',
+    porsjoner: 4,
+    vanskelighet: 'Middels',
+    smak: 'Kremet, salt, smør-gyllent',
+    ingress:
+      'Fiskegrateng har ufortjent dårlig rykte fordi noen bestemte seg for å servere den grå. Denne er gyllen, kremet i midten og har en topp som knaser som en frossen pytt i januar.',
+    ingredienser: [
+      { gruppe: 'Fisk og form', rader: [
+        { m: 600, e: 'g', n: 'torskefilet, i terninger' },
+        { m: 200, e: 'g', n: 'røkt laks, i biter' },
+        { m: 2, e: 'ss', n: 'smør, til formen' },
+        { m: 1, e: 'ts', n: 'salt' },
+      ]},
+      { gruppe: 'Hvit saus', rader: [
+        { m: 4, e: 'ss', n: 'smør' },
+        { m: 4, e: 'ss', n: 'hvetemel' },
+        { m: 5, e: 'dl', n: 'melk' },
+        { m: 1, e: 'dl', n: 'fløte' },
+        { m: 0.5, e: 'ts', n: 'muskatnøtt, revet' },
+        { m: 3, e: 'stk', n: 'eggeplommer' },
+      ]},
+      { gruppe: 'Sprø topp', rader: [
+        { m: 1.5, e: 'dl', n: 'grovt brødrasp' },
+        { m: 50, e: 'g', n: 'smør, smeltet' },
+        { m: 1, e: 'dl', n: 'revet vellagret hvitost' },
+      ]},
+    ],
+    steg: [
+      { t: 'Varm ovnen', d: 'Sett ovnen på 200°C over-/undervarme. En god grateng trenger en varm ovn fra start — ingen snarveier her.' },
+      { t: 'Kok opp saus', d: 'Smelt smør, rør inn mel, la boble et halvt minutt. Spe med melk og fløte mens du visper. La putre i 5 min til sausen er glatt og tykk som maling.' },
+      { t: 'Smak til', d: 'Ta av varmen. Visp inn eggeplommer én og én, muskat og salt. Sausen skal smake litt for sterkt — fisken trekker til seg smak når den steker.' },
+      { t: 'Fyll formen', d: 'Smør en ildfast form. Legg fiskeblandingen i, hell sausen over, vend forsiktig så fisken dekkes helt.' },
+      { t: 'Sprø topp', d: 'Bland brødrasp, smeltet smør og ost. Strø jevnt over gratengen — den skal se ut som en snøfonn med parmesan i.' },
+      { t: 'Gratinér', d: 'Stek i 35–40 min til toppen er gyllen og sausen bobler langs kanten. La hvile 10 min før servering — sausen trenger tid til å sette seg.' },
+    ],
+    servering: 'Med kokte gulrøtter, nypotet og en klatt rømme. Sitronbåt ved siden av, for den som vil ha en frisk skvett.',
+    par: 'Et tørt hvitvinsglass, eller kald mineralvann med sitron hvis det er tirsdag.',
+  },
+];
+
+const GM_SITAT = {
+  tekst: 'God mat smaker av stedet den kom fra, hendene som lagde den, og stemningen rundt bordet. Alt annet er bare fyllstoff.',
+  av: 'Redaksjonen',
+};
+
+// ---------- palette ----------
+const GM = {
+  cream: '#EFE8DA',
+  paper: '#F5EFE0',
+  dark: '#3C2A1E',
+  ink: '#2A1D14',
+  rust: '#8B2D1F',
+  rustDark: '#6B1F13',
+  mute: '#8A7A6B',
+};
+
+// ---------- illustrations ----------
+function IllTallerken({ size = 260, label = 'kjøttkaker' }) {
+  const rust = '#8B2D1F';
+  const dark = '#3C2A1E';
+  const cream = '#EFE8DA';
+  const warm = '#D9B384';
+  return (
+    <div style={{ position: 'relative', width: size, height: size }} aria-label={label}>
+      <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: cream, border: `2px solid ${dark}` }} />
+      <div style={{ position: 'absolute', inset: '8%', borderRadius: '50%', border: `1px solid ${dark}`, opacity: 0.35 }} />
+      <div style={{ position: 'absolute', left: '22%', top: '30%', width: '28%', height: '28%', borderRadius: '50%', background: dark, boxShadow: `inset -6px -6px 0 ${rust}` }} />
+      <div style={{ position: 'absolute', left: '50%', top: '25%', width: '28%', height: '28%', borderRadius: '50%', background: dark, boxShadow: `inset -6px -6px 0 ${rust}` }} />
+      <div style={{ position: 'absolute', left: '35%', top: '50%', width: '28%', height: '28%', borderRadius: '50%', background: dark, boxShadow: `inset -6px -6px 0 ${rust}` }} />
+      <div style={{ position: 'absolute', left: '20%', top: '28%', width: '62%', height: '42%', borderRadius: '50%', background: `radial-gradient(ellipse at 40% 40%, ${warm} 0%, transparent 65%)`, mixBlendMode: 'multiply', opacity: 0.6 }} />
+    </div>
+  );
+}
+
+function IllBolle({ size = 260, label = 'fiskegrateng' }) {
+  const rust = '#8B2D1F';
+  const dark = '#3C2A1E';
+  const gyllen = '#D9A441';
+  const topp = '#E8C57A';
+  const topper = [
+    { l: '18%', t: '28%', s: 22 },
+    { l: '32%', t: '24%', s: 28 },
+    { l: '50%', t: '26%', s: 24 },
+    { l: '66%', t: '23%', s: 30 },
+    { l: '78%', t: '30%', s: 20 },
+    { l: '22%', t: '42%', s: 26 },
+    { l: '42%', t: '40%', s: 30 },
+    { l: '62%', t: '44%', s: 24 },
+    { l: '78%', t: '48%', s: 22 },
+    { l: '28%', t: '58%', s: 22 },
+    { l: '48%', t: '60%', s: 26 },
+    { l: '68%', t: '62%', s: 20 },
+  ];
+  return (
+    <div style={{ position: 'relative', width: size, height: size }} aria-label={label}>
+      <div style={{ position: 'absolute', left: '6%', right: '6%', top: '18%', bottom: '14%', borderRadius: '14px', background: dark }} />
+      <div style={{ position: 'absolute', left: '10%', right: '10%', top: '22%', bottom: '18%', borderRadius: '10px', background: gyllen }} />
+      <div style={{ position: 'absolute', left: '2%', top: '38%', width: '8%', height: '22%', background: dark, borderRadius: '4px 0 0 4px' }} />
+      <div style={{ position: 'absolute', right: '2%', top: '38%', width: '8%', height: '22%', background: dark, borderRadius: '0 4px 4px 0' }} />
+      {topper.map((k, i) => (
+        <div key={i} style={{ position: 'absolute', left: k.l, top: k.t, width: k.s, height: k.s, borderRadius: '50%', background: topp, boxShadow: `inset -3px -3px 0 ${rust}44` }} />
+      ))}
+      <div style={{ position: 'absolute', left: '38%', top: '34%', width: 14, height: 10, borderRadius: '50%', background: rust, opacity: 0.7 }} />
+      <div style={{ position: 'absolute', left: '58%', top: '54%', width: 12, height: 8, borderRadius: '50%', background: rust, opacity: 0.7 }} />
+      <div style={{ position: 'absolute', left: '30%', top: '6%', fontSize: 18, color: dark, opacity: 0.4, fontFamily: 'serif' }}>∼</div>
+      <div style={{ position: 'absolute', left: '52%', top: '3%', fontSize: 22, color: dark, opacity: 0.35, fontFamily: 'serif' }}>∼</div>
+    </div>
+  );
+}
+
+function IllStempel({ tall = '01', tekst = 'MATSMAK', size = 140 }) {
+  const rust = '#8B2D1F';
+  const dark = '#3C2A1E';
+  return (
+    <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: `2px solid ${dark}` }} />
+      <div style={{ position: 'absolute', inset: 8, borderRadius: '50%', border: `1px solid ${rust}`, opacity: 0.5 }} />
+      <div style={{ textAlign: 'center', lineHeight: 1 }}>
+        <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: size * 0.32, color: dark, fontStyle: 'italic' }}>{tall}</div>
+        <div style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: size * 0.09, letterSpacing: '0.2em', color: rust, marginTop: 6, fontWeight: 500 }}>{tekst}</div>
+      </div>
+    </div>
+  );
+}
+
+// ---------- shared components ----------
+function GMRule({ thick = 2, mt = 0, mb = 0, color }) {
+  return <div style={{ height: thick, background: color || GM.ink, marginTop: mt, marginBottom: mb }} />;
+}
+
+function GMLabel({ nr, children, color }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: color || GM.ink }}>
+      {nr && <span style={{ color: GM.rust }}>{nr}</span>}
+      <span>{children}</span>
+    </div>
+  );
+}
+
+function GMNav({ onNav, aktiv = 'forside' }) {
+  const lenker = [
+    { id: 'forside', n: 'Forside' },
+    { id: 'oppskrifter', n: 'Oppskrifter' },
+    { id: 'om', n: 'Om' },
+  ];
+  return (
+    <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 40px', borderBottom: `1px solid ${GM.ink}22`, background: GM.cream, position: 'sticky', top: 0, zIndex: 10 }}>
+      <div onClick={() => onNav('forside')} style={{ cursor: 'pointer', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.28em', color: GM.ink }}>
+        GOD&nbsp;MATSMAK &nbsp;·&nbsp; EST.&nbsp;2026 &nbsp;·&nbsp; HAFJELL
+      </div>
+      <div style={{ display: 'flex', gap: 28 }}>
+        {lenker.map(l => (
+          <button key={l.id} onClick={() => onNav(l.id)} style={{
+            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+            fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, color: GM.ink,
+            fontWeight: aktiv === l.id ? 600 : 400,
+            borderBottom: aktiv === l.id ? `2px solid ${GM.rust}` : '2px solid transparent',
+            paddingBottom: 3,
+          }}>{l.n}</button>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+        <button style={{ background: 'none', border: `1px solid ${GM.ink}`, cursor: 'pointer', padding: '6px 14px', borderRadius: 999, fontFamily: '"Space Grotesk", sans-serif', fontSize: 12, color: GM.ink }}>Søk oppskrift</button>
+      </div>
+    </nav>
+  );
+}
+
+function GMFooter() {
+  return (
+    <footer style={{ background: GM.ink, color: GM.cream, padding: '60px 40px 40px', marginTop: 80 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: 40 }}>
+        <div>
+          <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 36, fontStyle: 'italic', lineHeight: 1 }}>God Matsmak.</div>
+          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.2em', marginTop: 10, color: GM.cream, opacity: 0.7 }}>SMAK SOM SMAKER. INGENTING ANNET.</div>
+        </div>
+        <div>
+          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.2em', marginBottom: 14, opacity: 0.6 }}>LES</div>
+          {['Forside', 'Oppskrifter', 'Sesong', 'Hovedretter'].map(n => (
+            <div key={n} style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, marginBottom: 6, cursor: 'pointer' }}>{n}</div>
+          ))}
+        </div>
+      </div>
+      <div style={{ marginTop: 60, paddingTop: 20, borderTop: `1px solid ${GM.cream}22`, display: 'flex', justifyContent: 'space-between', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em', opacity: 0.6 }}>
+        <span>© 2026 GOD MATSMAK — ALLE RETTER RESERVERT</span>
+        <span>«MAT SOM SMAKER. FOOD WHICH TASTES.»</span>
+      </div>
+    </footer>
+  );
+}
+
+// ---------- recipe cards ----------
+function GMKortMinimal({ r, onClick }) {
+  return (
+    <article onClick={onClick} style={{ cursor: 'pointer', display: 'grid', gridTemplateColumns: '140px 1fr auto', gap: 24, alignItems: 'center', padding: '24px 0', borderBottom: `1px solid ${GM.ink}20` }}>
+      <div style={{ width: 140, height: 140, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
+        {r.id === 'kjottkaker' ? <IllTallerken size={110} /> : <IllBolle size={110} />}
+      </div>
+      <div>
+        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>{r.nr} &nbsp;·&nbsp; {r.kategori.toUpperCase()}</div>
+        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 28, lineHeight: 1, margin: '6px 0 8px', color: GM.ink }}>{r.navn}</h3>
+        <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, color: GM.ink, opacity: 0.7, margin: 0 }}>{r.undertittel}</p>
+      </div>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.18em', color: GM.ink, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+        <span>{r.tid.toUpperCase()}</span>
+        <span style={{ opacity: 0.5 }}>{r.vanskelighet.toUpperCase()}</span>
+        <span style={{ marginTop: 10, color: GM.rust }}>LES →</span>
+      </div>
+    </article>
+  );
+}
+
+function GMKortStempel({ r, onClick }) {
+  return (
+    <article onClick={onClick} style={{ cursor: 'pointer', background: GM.paper, border: `2px solid ${GM.ink}`, padding: 28, position: 'relative', display: 'flex', flexDirection: 'column', gap: 20, aspectRatio: '4/5' }}>
+      <div style={{ position: 'absolute', top: 16, right: 16 }}>
+        <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={86} />
+      </div>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
+        {r.id === 'kjottkaker' ? <IllTallerken size={220} /> : <IllBolle size={220} />}
+      </div>
+      <div>
+        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, marginBottom: 6 }}>{r.kategori.toUpperCase()} &nbsp;·&nbsp; {r.tid.toUpperCase()}</div>
+        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 28, lineHeight: 1, margin: 0, color: GM.ink, fontStyle: 'italic' }}>{r.navn}</h3>
+      </div>
+    </article>
+  );
+}
+
+// ---------- forside ----------
+function GMHero() {
+  return (
+    <section style={{ padding: '60px 40px 40px', position: 'relative' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 40, alignItems: 'center' }}>
+        <div>
+          <GMLabel>Oppskrifter som smaker</GMLabel>
+          <div style={{ height: 30 }} />
+          <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(64px, 9vw, 128px)', lineHeight: 0.88, margin: 0, color: GM.ink, letterSpacing: '-0.03em' }}>
+            God<br/>
+            <span style={{ fontStyle: 'italic', color: GM.rust }}>Matsmak.</span>
+          </h1>
+          <div style={{ height: 26 }} />
+          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 440, margin: 0 }}>
+            Her finnes ingen dårlige smaker. Bare god mat.
+            Som smaker mat. Mat som smaker. Du skjønner tegninga.
+          </p>
+        </div>
+        <div style={{ width: 1, alignSelf: 'stretch', background: GM.ink, opacity: 0.2 }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', top: -20, right: -10, transform: 'rotate(12deg)' }}>
+            <IllStempel tall="✓" tekst="GOD SMAK" size={120} />
+          </div>
+          <IllTallerken size={340} />
+        </div>
+      </div>
+      <GMRule mt={50} thick={2} />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0 }}>
+        {[
+          { k: 'Dårlige smaker', v: '0' },
+          { k: 'Gode smaker', v: String(GM_RECIPES.length) },
+        ].map((s, i) => (
+          <div key={s.k} style={{ padding: '20px 24px', borderRight: i < 1 ? `1px solid ${GM.ink}22` : 'none' }}>
+            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 36, color: GM.ink, lineHeight: 1 }}>{s.v}</div>
+            <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.6, marginTop: 8 }}>{s.k.toUpperCase()}</div>
+          </div>
+        ))}
+      </div>
+      <GMRule thick={2} />
+    </section>
+  );
+}
+
+function GMSeksjonTittel({ nr, tittel, undertittel }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 40, padding: '60px 40px 30px', alignItems: 'end' }}>
+      <div>
+        <GMLabel nr={nr}>Oppskrifter</GMLabel>
+      </div>
+      <div>
+        <h2 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(40px, 5vw, 72px)', lineHeight: 1, margin: 0, color: GM.ink, letterSpacing: '-0.02em' }}>{tittel}</h2>
+        {undertittel && (
+          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.7, marginTop: 14, maxWidth: 560 }}>{undertittel}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function GMSitat() {
+  return (
+    <section style={{ background: GM.ink, color: GM.cream, padding: '100px 40px', textAlign: 'center', margin: '60px 0', position: 'relative' }}>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.5, marginBottom: 30 }}>KJØKKENFILOSOFI №01</div>
+      <blockquote style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(28px, 4vw, 52px)', lineHeight: 1.15, maxWidth: 1000, margin: '0 auto', fontStyle: 'italic', letterSpacing: '-0.01em' }}>
+        <span style={{ color: GM.rust, fontSize: '1.2em' }}>«</span>
+        {GM_SITAT.tekst}
+        <span style={{ color: GM.rust, fontSize: '1.2em' }}>»</span>
+      </blockquote>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.6, marginTop: 30 }}>— {GM_SITAT.av.toUpperCase()}</div>
+    </section>
+  );
+}
+
+function GMForside({ onOpen, onSeAlle }) {
+  const utvalgt = GM_RECIPES[0];
+  return (
+    <>
+      <GMHero />
+      <GMSeksjonTittel
+        nr="§ 01"
+        tittel={<>Smaker som <span style={{ fontStyle: 'italic', color: GM.rust }}>faktisk</span> smaker.</>}
+        undertittel="Ingen snarveier. Ingen ironi på bekostning av osten. Bare oppskrifter som kommer ut av kjøkkenet og smaker som de lover."
+      />
+      <section style={{ padding: '0 40px', display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 60, alignItems: 'center' }}>
+        <div onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', background: GM.paper, padding: 60, aspectRatio: '5/4', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
+          <IllTallerken size={400} />
+        </div>
+        <div>
+          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>UKENS SMAK · {utvalgt.tid.toUpperCase()}</div>
+          <h3 onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(40px, 5vw, 68px)', lineHeight: 0.95, margin: '14px 0 18px', color: GM.ink, letterSpacing: '-0.02em' }}>{utvalgt.navn}</h3>
+          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 460 }}>{utvalgt.ingress}</p>
+          <button onClick={() => onOpen(utvalgt.id)} style={{ marginTop: 28, padding: '12px 22px', cursor: 'pointer', background: GM.ink, color: GM.cream, border: 'none', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em' }}>LES OPPSKRIFTEN →</button>
+        </div>
+      </section>
+      <GMSitat />
+      <section style={{ padding: '80px 40px', textAlign: 'center', borderTop: `1px solid ${GM.ink}22`, borderBottom: `1px solid ${GM.ink}22` }}>
+        <GMLabel>Alle oppskriftene</GMLabel>
+        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1, margin: '20px auto 16px', color: GM.ink, maxWidth: 900, letterSpacing: '-0.02em' }}>
+          {GM_RECIPES.length} oppskrifter. <span style={{ fontStyle: 'italic', color: GM.rust }}>Null</span> dårlige.
+        </h3>
+        <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.7, maxWidth: 520, margin: '0 auto 30px' }}>
+          Bla gjennom hele samlingen. Vi har tørket av tallerkenen for deg.
+        </p>
+        <button onClick={onSeAlle} style={{ padding: '14px 28px', cursor: 'pointer', background: GM.rust, color: GM.cream, border: 'none', fontFamily: '"JetBrains Mono", monospace', fontSize: 12, letterSpacing: '0.22em' }}>SE ALLE OPPSKRIFTER →</button>
+      </section>
+    </>
+  );
+}
+
+// ---------- oppskriftsliste ----------
+function GMOppskriftListe({ onOpen }) {
+  return (
+    <>
+      <section style={{ padding: '60px 40px 30px' }}>
+        <GMLabel nr="§ 01">Alle oppskrifter</GMLabel>
+        <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(56px, 8vw, 112px)', lineHeight: 0.9, margin: '24px 0 20px', color: GM.ink, letterSpacing: '-0.03em' }}>
+          Hele <span style={{ fontStyle: 'italic', color: GM.rust }}>samlingen</span>.
+        </h1>
+        <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 560, margin: 0 }}>
+          {GM_RECIPES.length} oppskrifter som er kvalitetssikret, smakt på,
+          og godkjent av minst én bestemor.
+        </p>
+        <GMRule mt={40} thick={2} />
+      </section>
+      <div style={{ padding: '0 40px' }}>
+        {GM_RECIPES.map(r => (
+          <GMKortMinimal key={r.id} r={r} onClick={() => onOpen(r.id)} />
+        ))}
+      </div>
+      <div style={{ height: 80 }} />
+    </>
+  );
+}
+
+// ---------- oppskrift detaljer ----------
+function GMPorsjonJuster({ porsjoner, setPorsjoner }) {
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 0, border: `1px solid ${GM.ink}` }}>
+      <button onClick={() => setPorsjoner(Math.max(1, porsjoner - 1))} style={{ width: 36, height: 36, border: 'none', background: GM.cream, cursor: 'pointer', fontSize: 18, color: GM.ink, borderRight: `1px solid ${GM.ink}` }}>−</button>
+      <div style={{ minWidth: 70, textAlign: 'center', padding: '0 12px', fontFamily: '"Libre Caslon Text", serif', fontSize: 20, color: GM.ink, fontStyle: 'italic' }}>{porsjoner} pors.</div>
+      <button onClick={() => setPorsjoner(porsjoner + 1)} style={{ width: 36, height: 36, border: 'none', background: GM.cream, cursor: 'pointer', fontSize: 18, color: GM.ink, borderLeft: `1px solid ${GM.ink}` }}>+</button>
+    </div>
+  );
+}
+
+function formaterMengde(m, faktor) {
+  const n = m * faktor;
+  if (n < 1) {
+    const brøker = [[0.25, '¼'], [0.33, '⅓'], [0.5, '½'], [0.66, '⅔'], [0.75, '¾']];
+    const match = brøker.find(b => Math.abs(n - b[0]) < 0.05);
+    if (match) return match[1];
+    return n.toFixed(2).replace(/\.?0+$/, '');
+  }
+  return (Math.round(n * 10) / 10).toString().replace('.', ',');
+}
+
+function GMTimer() {
+  const [sek, setSek] = React.useState(0);
+  const [kjor, setKjor] = React.useState(false);
+  React.useEffect(() => {
+    if (!kjor) return;
+    const id = setInterval(() => setSek(s => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [kjor]);
+  const mm = String(Math.floor(sek / 60)).padStart(2, '0');
+  const ss = String(sek % 60).padStart(2, '0');
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: GM.ink, color: GM.cream }}>
+      <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', opacity: 0.7 }}>TIDTAKER</span>
+      <span style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 28, fontStyle: 'italic', letterSpacing: '-0.02em' }}>{mm}:{ss}</span>
+      <button onClick={() => setKjor(!kjor)} style={{ background: GM.rust, color: GM.cream, border: 'none', cursor: 'pointer', padding: '6px 12px', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em' }}>{kjor ? 'PAUSE' : 'START'}</button>
+      <button onClick={() => { setSek(0); setKjor(false); }} style={{ background: 'transparent', color: GM.cream, border: `1px solid ${GM.cream}44`, cursor: 'pointer', padding: '6px 10px', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em' }}>NULL</button>
+    </div>
+  );
+}
+
+function GMOppskrift({ id, onBack }) {
+  const r = GM_RECIPES.find(x => x.id === id) || GM_RECIPES[0];
+  const [porsjoner, setPorsjoner] = React.useState(r.porsjoner);
+  const [krysset, setKrysset] = React.useState({});
+  const [steg, setSteg] = React.useState({});
+  const faktor = porsjoner / r.porsjoner;
+
+  React.useEffect(() => {
+    setPorsjoner(r.porsjoner);
+    setKrysset({});
+    setSteg({});
+  }, [id]);
+
+  const toggle = (k) => setKrysset(p => ({ ...p, [k]: !p[k] }));
+  const toggleSteg = (k) => setSteg(p => ({ ...p, [k]: !p[k] }));
+  const neste = GM_RECIPES.find(x => x.id !== r.id);
+
+  return (
+    <article>
+      <section style={{ padding: '40px 40px 60px', position: 'relative' }}>
+        <button onClick={() => onBack()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.ink, marginBottom: 30 }}>← TILBAKE TIL OPPSKRIFTER</button>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 60, alignItems: 'center' }}>
+          <div>
+            <GMLabel nr={r.nr}>{r.kategori}</GMLabel>
+            <div style={{ height: 26 }} />
+            <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(52px, 7vw, 104px)', lineHeight: 0.9, margin: 0, color: GM.ink, letterSpacing: '-0.03em' }}>
+              {r.navn.split(' ').map((w, i, arr) => (
+                <React.Fragment key={i}>
+                  {i === arr.length - 1 ? (
+                    <span style={{ fontStyle: 'italic', color: GM.rust }}>{w}</span>
+                  ) : w}
+                  {i < arr.length - 1 && ' '}
+                </React.Fragment>
+              ))}
+            </h1>
+            <div style={{ height: 20 }} />
+            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 22, color: GM.rust }}>{r.undertittel}.</div>
+            <div style={{ height: 30 }} />
+            <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 520, margin: 0 }}>{r.ingress}</p>
+            <GMRule mt={40} mb={20} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+              {[
+                ['Tid', r.tid],
+                ['Porsjoner', r.porsjoner + ' stk'],
+                ['Smak', r.smak],
+                ['Nivå', r.vanskelighet],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.5, marginBottom: 6 }}>{k.toUpperCase()}</div>
+                  <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 18, color: GM.ink, fontStyle: 'italic' }}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: GM.paper, padding: 40, border: `1px solid ${GM.ink}15`, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+            {r.id === 'kjottkaker' ? <IllTallerken size={340} /> : <IllBolle size={340} />}
+            <div style={{ position: 'absolute', bottom: -24, right: -24, transform: 'rotate(-8deg)' }}>
+              <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={110} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '60px 40px', background: GM.paper, borderTop: `2px solid ${GM.ink}`, borderBottom: `2px solid ${GM.ink}` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 60 }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+              <GMLabel nr="§ A">Ingredienser</GMLabel>
+              <GMPorsjonJuster porsjoner={porsjoner} setPorsjoner={setPorsjoner} />
+            </div>
+            {r.ingredienser.map((grp, gi) => (
+              <div key={gi} style={{ marginBottom: 30 }}>
+                <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 24, color: GM.ink, fontStyle: 'italic', marginBottom: 14, paddingBottom: 8, borderBottom: `1px solid ${GM.ink}33` }}>{grp.gruppe}</div>
+                {grp.rader.map((rd, ri) => {
+                  const k = `${gi}-${ri}`;
+                  const on = !!krysset[k];
+                  return (
+                    <label key={ri} style={{ display: 'flex', alignItems: 'baseline', gap: 14, padding: '8px 0', cursor: 'pointer', borderBottom: `1px dotted ${GM.ink}22`, opacity: on ? 0.4 : 1 }}>
+                      <input type="checkbox" checked={on} onChange={() => toggle(k)} style={{ accentColor: GM.rust, width: 16, height: 16, flexShrink: 0 }} />
+                      <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 13, color: GM.rust, minWidth: 72, textDecoration: on ? 'line-through' : 'none' }}>{formaterMengde(rd.m, faktor)} {rd.e}</span>
+                      <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 15, color: GM.ink, flex: 1, textDecoration: on ? 'line-through' : 'none' }}>{rd.n}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+              <GMLabel nr="§ B">Slik gjør du</GMLabel>
+              <GMTimer />
+            </div>
+            <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {r.steg.map((s, i) => {
+                const on = !!steg[i];
+                return (
+                  <li key={i} onClick={() => toggleSteg(i)} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 24, padding: '24px 0', cursor: 'pointer', borderBottom: `1px solid ${GM.ink}22`, opacity: on ? 0.35 : 1 }}>
+                    <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 72, lineHeight: 0.9, color: on ? GM.ink : GM.rust, fontStyle: 'italic', textDecoration: on ? 'line-through' : 'none' }}>{String(i + 1).padStart(2, '0')}</div>
+                    <div>
+                      <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 26, color: GM.ink, marginBottom: 8, letterSpacing: '-0.01em' }}>{s.t}</div>
+                      <div style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.8, lineHeight: 1.55 }}>{s.d}</div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60 }}>
+        <div>
+          <GMLabel nr="§ C">Servér slik</GMLabel>
+          <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.servering}</p>
+        </div>
+        <div>
+          <GMLabel nr="§ D">Drikk til</GMLabel>
+          <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.par}</p>
+        </div>
+      </section>
+
+      <section style={{ padding: '60px 40px', background: GM.ink, color: GM.cream }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', opacity: 0.6 }}>NESTE OPPSKRIFT</div>
+            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 44, marginTop: 12, fontStyle: 'italic' }}>{neste.navn}</div>
+          </div>
+          <button onClick={() => onBack(neste.id)} style={{ background: GM.rust, color: GM.cream, border: 'none', cursor: 'pointer', padding: '18px 32px', fontFamily: '"JetBrains Mono", monospace', fontSize: 12, letterSpacing: '0.22em' }}>LES DEN →</button>
+        </div>
+      </section>
+    </article>
+  );
+}
+
+// ---------- app shell ----------
+function App() {
+  const [side, setSide] = React.useState(() => localStorage.getItem('gm_side') || 'forside');
+  const [oppskriftId, setOppskriftId] = React.useState(() => localStorage.getItem('gm_oppskrift') || 'kjottkaker');
+
+  React.useEffect(() => { localStorage.setItem('gm_side', side); }, [side]);
+  React.useEffect(() => { localStorage.setItem('gm_oppskrift', oppskriftId); }, [oppskriftId]);
+
+  const openOppskrift = (id) => {
+    setOppskriftId(id);
+    setSide('oppskrift');
+    window.scrollTo(0, 0);
+  };
+
+  const tilbake = (maybeId) => {
+    if (typeof maybeId === 'string') {
+      setOppskriftId(maybeId);
+      window.scrollTo(0, 0);
+      return;
+    }
+    setSide('oppskrifter');
+    window.scrollTo(0, 0);
+  };
+
+  const onNav = (s) => {
+    if (s === 'forside') { setSide('forside'); window.scrollTo(0, 0); }
+    else if (s === 'oppskrifter') { setSide('oppskrifter'); window.scrollTo(0, 0); }
+  };
+
+  return (
+    <div>
+      <GMNav onNav={onNav} aktiv={side === 'oppskrift' ? 'oppskrifter' : side} />
+      {side === 'forside' && (
+        <GMForside onOpen={openOppskrift} onSeAlle={() => onNav('oppskrifter')} />
+      )}
+      {side === 'oppskrifter' && (
+        <GMOppskriftListe onOpen={openOppskrift} />
+      )}
+      {side === 'oppskrift' && (
+        <GMOppskrift id={oppskriftId} onBack={tilbake} />
+      )}
+      <GMFooter />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
