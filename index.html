@@ -305,6 +305,58 @@ function GMKortStempel({ r, onClick }) {
 }
 
 // ---------- forside ----------
+function GMKjenningsmelodi() {
+  const audioRef = React.useRef(null);
+  const [spiller, setSpiller] = React.useState(false);
+
+  React.useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    const onEnd = () => setSpiller(false);
+    a.addEventListener('ended', onEnd);
+    return () => a.removeEventListener('ended', onEnd);
+  }, []);
+
+  const toggle = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (spiller) { a.pause(); setSpiller(false); }
+    else { a.play(); setSpiller(true); }
+  };
+
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 28, border: `2px solid ${GM.ink}`, padding: '10px 16px 10px 10px', background: GM.paper }}>
+      <button onClick={toggle} aria-label={spiller ? 'Pause kjenningsmelodi' : 'Spill kjenningsmelodi'} style={{
+        width: 40, height: 40, borderRadius: '50%', border: 'none', cursor: 'pointer',
+        background: GM.rust, color: GM.cream,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 14, paddingLeft: spiller ? 0 : 3,
+      }}>
+        {spiller ? (
+          <span style={{ display: 'inline-flex', gap: 3 }}>
+            <span style={{ width: 4, height: 14, background: GM.cream }} />
+            <span style={{ width: 4, height: 14, background: GM.cream }} />
+          </span>
+        ) : (
+          <span style={{
+            width: 0, height: 0,
+            borderLeft: `10px solid ${GM.cream}`,
+            borderTop: '7px solid transparent',
+            borderBottom: '7px solid transparent',
+          }} />
+        )}
+      </button>
+      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>KJENNINGSMELODI</span>
+        <span style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 18, color: GM.ink, marginTop: 4 }}>
+          {spiller ? 'Spiller nå…' : 'Trykk for å smake'}
+        </span>
+      </div>
+      <audio ref={audioRef} src="god-matsmak.mp3" preload="none" />
+    </div>
+  );
+}
+
 function GMHero() {
   return (
     <section style={{ padding: '60px 40px 40px', position: 'relative' }}>
@@ -321,6 +373,7 @@ function GMHero() {
             Her finnes ingen dårlige smaker. Bare god mat.
             Som smaker mat. Mat som smaker. Du skjønner tegninga.
           </p>
+          <GMKjenningsmelodi />
         </div>
         <div style={{ width: 1, alignSelf: 'stretch', background: GM.ink, opacity: 0.2 }} />
         <div style={{ position: 'relative' }}>
