@@ -139,12 +139,107 @@ function GMLabel({ nr, children, color }) {
   );
 }
 
-function GMNav({ onNav, aktiv = 'forside' }) {
+function GMSok({ recipes, onOpen, onLukk }) {
+  const [q, setQ] = React.useState('');
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    inputRef.current?.focus();
+    const onKey = (e) => { if (e.key === 'Escape') onLukk(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const treff = React.useMemo(() => {
+    if (!recipes) return [];
+    const s = q.trim().toLowerCase();
+    if (!s) return recipes;
+    return recipes.filter(r => {
+      const hay = [
+        r.navn, r.undertittel, r.kategori, r.smak, r.ingress,
+        ...r.ingredienser.flatMap(g => [g.gruppe, ...g.rader.map(x => x.n)]),
+      ].join(' ').toLowerCase();
+      return hay.includes(s);
+    });
+  }, [q, recipes]);
+
+  return (
+    <div style={{
+      position: 'absolute', top: 'calc(100% + 1px)', right: 40,
+      width: 'min(480px, calc(100vw - 80px))',
+      background: GM.cream, border: `2px solid ${GM.ink}`,
+      boxShadow: `6px 6px 0 ${GM.ink}`, zIndex: 20,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', borderBottom: `1px solid ${GM.ink}22` }}>
+        <input
+          ref={inputRef}
+          value={q}
+          onChange={e => setQ(e.target.value)}
+          placeholder="Søk i navn, smak eller ingrediens…"
+          style={{
+            flex: 1, border: 'none', outline: 'none', background: 'transparent',
+            padding: '16px 18px', fontFamily: '"Libre Caslon Text", serif',
+            fontStyle: 'italic', fontSize: 20, color: GM.ink,
+          }}
+        />
+        <button onClick={onLukk} aria-label="Lukk søk" style={{
+          background: 'none', border: 'none', cursor: 'pointer',
+          padding: '0 18px', fontSize: 22, color: GM.ink,
+        }}>×</button>
+      </div>
+      <div style={{ maxHeight: 360, overflowY: 'auto' }}>
+        {treff.length === 0 ? (
+          <div style={{ padding: '22px 18px', fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 18, color: GM.ink, opacity: 0.7 }}>
+            Ingen treff. Prøv «fiskesaus», «saus» eller «mormor».
+          </div>
+        ) : treff.map(r => {
+          const Ill = velgIllustrasjon(r);
+          return (
+            <button key={r.id} onClick={() => onOpen(r.id)} style={{
+              display: 'grid', gridTemplateColumns: '48px 1fr auto', gap: 14,
+              alignItems: 'center', width: '100%', textAlign: 'left',
+              padding: '14px 18px', background: 'transparent', border: 'none',
+              borderBottom: `1px solid ${GM.ink}14`, cursor: 'pointer',
+            }}
+              onMouseEnter={e => e.currentTarget.style.background = GM.paper}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
+              <div style={{ width: 48, height: 48, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
+                <Ill size={38} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 18, color: GM.ink, lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.navn}</div>
+                <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, marginTop: 4 }}>
+                  {r.kategori.toUpperCase()} · {r.tid.toUpperCase()}
+                </div>
+              </div>
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>→</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
+  const [sokOpen, setSokOpen] = React.useState(false);
+  const wrapRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!sokOpen) return;
+    const onClick = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setSokOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [sokOpen]);
+
   const lenker = [
     { id: 'forside', n: 'Forside' },
     { id: 'oppskrifter', n: 'Oppskrifter' },
-    { id: 'om', n: 'Om' },
   ];
+
   return (
     <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 40px', borderBottom: `1px solid ${GM.ink}22`, background: GM.cream, position: 'sticky', top: 0, zIndex: 10 }}>
       <div onClick={() => onNav('forside')} style={{ cursor: 'pointer', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.28em', color: GM.ink }}>
@@ -161,14 +256,30 @@ function GMNav({ onNav, aktiv = 'forside' }) {
           }}>{l.n}</button>
         ))}
       </div>
-      <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-        <button style={{ background: 'none', border: `1px solid ${GM.ink}`, cursor: 'pointer', padding: '6px 14px', borderRadius: 999, fontFamily: '"Space Grotesk", sans-serif', fontSize: 12, color: GM.ink }}>Søk oppskrift</button>
+      <div ref={wrapRef} style={{ display: 'flex', gap: 14, alignItems: 'center', position: 'relative' }}>
+        <button onClick={() => setSokOpen(o => !o)} style={{
+          background: sokOpen ? GM.ink : 'none', color: sokOpen ? GM.cream : GM.ink,
+          border: `1px solid ${GM.ink}`, cursor: 'pointer',
+          padding: '6px 14px', borderRadius: 999,
+          fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
+        }}>Søk oppskrift</button>
+        {sokOpen && (
+          <GMSok
+            recipes={recipes}
+            onOpen={(id) => { setSokOpen(false); onOpenOppskrift(id); }}
+            onLukk={() => setSokOpen(false)}
+          />
+        )}
       </div>
     </nav>
   );
 }
 
-function GMFooter() {
+function GMFooter({ onNav }) {
+  const lenker = [
+    { id: 'forside', n: 'Forside' },
+    { id: 'oppskrifter', n: 'Oppskrifter' },
+  ];
   return (
     <footer style={{ background: GM.ink, color: GM.cream, padding: '60px 40px 40px', marginTop: 80 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: 40 }}>
@@ -178,8 +289,12 @@ function GMFooter() {
         </div>
         <div>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.2em', marginBottom: 14, opacity: 0.6 }}>LES</div>
-          {['Forside', 'Oppskrifter', 'Sesong', 'Hovedretter'].map(n => (
-            <div key={n} style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, marginBottom: 6, cursor: 'pointer' }}>{n}</div>
+          {lenker.map(l => (
+            <button key={l.id} onClick={() => onNav(l.id)} style={{
+              display: 'block', background: 'none', border: 'none', padding: 0,
+              color: GM.cream, cursor: 'pointer', textAlign: 'left',
+              fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, marginBottom: 6,
+            }}>{l.n}</button>
           ))}
         </div>
       </div>
@@ -656,7 +771,7 @@ function App() {
 
   return (
     <div>
-      <GMNav onNav={onNav} aktiv={side === 'oppskrift' ? 'oppskrifter' : side} />
+      <GMNav onNav={onNav} aktiv={side === 'oppskrift' ? 'oppskrifter' : side} recipes={recipes} onOpenOppskrift={openOppskrift} />
       {feil && <GMFeil melding={feil} />}
       {!feil && !recipes && <GMLaster />}
       {!feil && recipes && side === 'forside' && (
@@ -668,7 +783,7 @@ function App() {
       {!feil && recipes && side === 'oppskrift' && (
         <GMOppskrift recipes={recipes} id={oppskriftId} onBack={tilbake} />
       )}
-      <GMFooter />
+      <GMFooter onNav={onNav} />
     </div>
   );
 }
