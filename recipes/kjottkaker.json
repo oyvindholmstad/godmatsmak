@@ -1,0 +1,47 @@
+{
+  "id": "kjottkaker",
+  "nr": "№ 01",
+  "navn": "Kjøttkaker i brun saus",
+  "undertittel": "Den som smaker som mormor, bare litt frekkere",
+  "kategori": "Hovedrett",
+  "tid": "55 min",
+  "porsjoner": 4,
+  "vanskelighet": "Enkel",
+  "smak": "Salt, umami, litt søt",
+  "ingress": "Det finnes kjøttkaker, og så finnes det KJØTTKAKER. Disse er den siste sorten. Sausen er brun som en norsk novembermorgen og dobbelt så koselig.",
+  "illustrasjon": "tallerken",
+  "ingredienser": [
+    {
+      "gruppe": "Kjøttkakene",
+      "rader": [
+        { "m": 500, "e": "g", "n": "kjøttdeig av storfe" },
+        { "m": 1, "e": "dl", "n": "melk" },
+        { "m": 2, "e": "ss", "n": "potetmel" },
+        { "m": 1, "e": "stk", "n": "egg" },
+        { "m": 1, "e": "ts", "n": "salt" },
+        { "m": 0.5, "e": "ts", "n": "malt ingefær" },
+        { "m": 0.5, "e": "ts", "n": "muskatnøtt" },
+        { "m": 0.25, "e": "ts", "n": "pepper" }
+      ]
+    },
+    {
+      "gruppe": "Brun saus",
+      "rader": [
+        { "m": 3, "e": "ss", "n": "smør" },
+        { "m": 3, "e": "ss", "n": "hvetemel" },
+        { "m": 6, "e": "dl", "n": "kjøttkraft" },
+        { "m": 1, "e": "ss", "n": "sukkerkulør" },
+        { "m": 1, "e": "ts", "n": "soyasaus" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Elte deigen", "d": "Bland kjøttdeig med salt og krydder. La stå 5 min — saltet trekker ut proteinene, og det er derfor kakene blir saftige, ikke tørre." },
+    { "t": "Spe med væske", "d": "Tilsett potetmel, egg og melk litt etter litt. Deigen skal være myk, men holde formen." },
+    { "t": "Form og brun", "d": "Form kjøttkaker på størrelse med en plomme. Stek i smør til de er gyllenbrune på begge sider." },
+    { "t": "Lag sausen", "d": "Smelt smør, rør inn mel og la boble et halvt minutt. Spe med kraft mens du visper. Smak til med sukkerkulør og soya." },
+    { "t": "Trekk sammen", "d": "Legg kjøttkakene i sausen, la dem trekke i 10 min på svak varme. Smaken får satt seg." }
+  ],
+  "servering": "Med kokte poteter, tyttebær og ertestuing. Og masse saus. Mer saus enn du tror er lov.",
+  "par": "Et glass pilsner eller et glass melk, etter dagsform."
+}

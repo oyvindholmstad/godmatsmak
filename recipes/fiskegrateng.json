@@ -1,0 +1,53 @@
+{
+  "id": "fiskegrateng",
+  "nr": "№ 02",
+  "navn": "Fiskegrateng med sprø topp",
+  "undertittel": "Kantina på skolen tok feil — dette er noe helt annet",
+  "kategori": "Hovedrett",
+  "tid": "1 t 10 min",
+  "porsjoner": 4,
+  "vanskelighet": "Middels",
+  "smak": "Kremet, salt, smør-gyllent",
+  "ingress": "Fiskegrateng har ufortjent dårlig rykte fordi noen bestemte seg for å servere den grå. Denne er gyllen, kremet i midten og har en topp som knaser som en frossen pytt i januar.",
+  "illustrasjon": "bolle",
+  "ingredienser": [
+    {
+      "gruppe": "Fisk og form",
+      "rader": [
+        { "m": 600, "e": "g", "n": "torskefilet, i terninger" },
+        { "m": 200, "e": "g", "n": "røkt laks, i biter" },
+        { "m": 2, "e": "ss", "n": "smør, til formen" },
+        { "m": 1, "e": "ts", "n": "salt" }
+      ]
+    },
+    {
+      "gruppe": "Hvit saus",
+      "rader": [
+        { "m": 4, "e": "ss", "n": "smør" },
+        { "m": 4, "e": "ss", "n": "hvetemel" },
+        { "m": 5, "e": "dl", "n": "melk" },
+        { "m": 1, "e": "dl", "n": "fløte" },
+        { "m": 0.5, "e": "ts", "n": "muskatnøtt, revet" },
+        { "m": 3, "e": "stk", "n": "eggeplommer" }
+      ]
+    },
+    {
+      "gruppe": "Sprø topp",
+      "rader": [
+        { "m": 1.5, "e": "dl", "n": "grovt brødrasp" },
+        { "m": 50, "e": "g", "n": "smør, smeltet" },
+        { "m": 1, "e": "dl", "n": "revet vellagret hvitost" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Varm ovnen", "d": "Sett ovnen på 200°C over-/undervarme. En god grateng trenger en varm ovn fra start — ingen snarveier her." },
+    { "t": "Kok opp saus", "d": "Smelt smør, rør inn mel, la boble et halvt minutt. Spe med melk og fløte mens du visper. La putre i 5 min til sausen er glatt og tykk som maling." },
+    { "t": "Smak til", "d": "Ta av varmen. Visp inn eggeplommer én og én, muskat og salt. Sausen skal smake litt for sterkt — fisken trekker til seg smak når den steker." },
+    { "t": "Fyll formen", "d": "Smør en ildfast form. Legg fiskeblandingen i, hell sausen over, vend forsiktig så fisken dekkes helt." },
+    { "t": "Sprø topp", "d": "Bland brødrasp, smeltet smør og ost. Strø jevnt over gratengen — den skal se ut som en snøfonn med parmesan i." },
+    { "t": "Gratinér", "d": "Stek i 35–40 min til toppen er gyllen og sausen bobler langs kanten. La hvile 10 min før servering — sausen trenger tid til å sette seg." }
+  ],
+  "servering": "Med kokte gulrøtter, nypotet og en klatt rømme. Sitronbåt ved siden av, for den som vil ha en frisk skvett.",
+  "par": "Et tørt hvitvinsglass, eller kald mineralvann med sitron hvis det er tirsdag."
+}

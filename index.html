@@ -27,98 +27,23 @@
 
 <script type="text/babel">
 // ---------- data ----------
-const GM_RECIPES = [
-  {
-    id: 'kjottkaker',
-    nr: '№ 01',
-    navn: 'Kjøttkaker i brun saus',
-    undertittel: 'Den som smaker som mormor, bare litt frekkere',
-    kategori: 'Hovedrett',
-    tid: '55 min',
-    porsjoner: 4,
-    vanskelighet: 'Enkel',
-    smak: 'Salt, umami, litt søt',
-    ingress:
-      'Det finnes kjøttkaker, og så finnes det KJØTTKAKER. Disse er den siste sorten. Sausen er brun som en norsk novembermorgen og dobbelt så koselig.',
-    ingredienser: [
-      { gruppe: 'Kjøttkakene', rader: [
-        { m: 500, e: 'g', n: 'kjøttdeig av storfe' },
-        { m: 1, e: 'dl', n: 'melk' },
-        { m: 2, e: 'ss', n: 'potetmel' },
-        { m: 1, e: 'stk', n: 'egg' },
-        { m: 1, e: 'ts', n: 'salt' },
-        { m: 0.5, e: 'ts', n: 'malt ingefær' },
-        { m: 0.5, e: 'ts', n: 'muskatnøtt' },
-        { m: 0.25, e: 'ts', n: 'pepper' },
-      ]},
-      { gruppe: 'Brun saus', rader: [
-        { m: 3, e: 'ss', n: 'smør' },
-        { m: 3, e: 'ss', n: 'hvetemel' },
-        { m: 6, e: 'dl', n: 'kjøttkraft' },
-        { m: 1, e: 'ss', n: 'sukkerkulør' },
-        { m: 1, e: 'ts', n: 'soyasaus' },
-      ]},
-    ],
-    steg: [
-      { t: 'Elte deigen', d: 'Bland kjøttdeig med salt og krydder. La stå 5 min — saltet trekker ut proteinene, og det er derfor kakene blir saftige, ikke tørre.' },
-      { t: 'Spe med væske', d: 'Tilsett potetmel, egg og melk litt etter litt. Deigen skal være myk, men holde formen.' },
-      { t: 'Form og brun', d: 'Form kjøttkaker på størrelse med en plomme. Stek i smør til de er gyllenbrune på begge sider.' },
-      { t: 'Lag sausen', d: 'Smelt smør, rør inn mel og la boble et halvt minutt. Spe med kraft mens du visper. Smak til med sukkerkulør og soya.' },
-      { t: 'Trekk sammen', d: 'Legg kjøttkakene i sausen, la dem trekke i 10 min på svak varme. Smaken får satt seg.' },
-    ],
-    servering: 'Med kokte poteter, tyttebær og ertestuing. Og masse saus. Mer saus enn du tror er lov.',
-    par: 'Et glass pilsner eller et glass melk, etter dagsform.',
-  },
-  {
-    id: 'fiskegrateng',
-    nr: '№ 02',
-    navn: 'Fiskegrateng med sprø topp',
-    undertittel: 'Kantina på skolen tok feil — dette er noe helt annet',
-    kategori: 'Hovedrett',
-    tid: '1 t 10 min',
-    porsjoner: 4,
-    vanskelighet: 'Middels',
-    smak: 'Kremet, salt, smør-gyllent',
-    ingress:
-      'Fiskegrateng har ufortjent dårlig rykte fordi noen bestemte seg for å servere den grå. Denne er gyllen, kremet i midten og har en topp som knaser som en frossen pytt i januar.',
-    ingredienser: [
-      { gruppe: 'Fisk og form', rader: [
-        { m: 600, e: 'g', n: 'torskefilet, i terninger' },
-        { m: 200, e: 'g', n: 'røkt laks, i biter' },
-        { m: 2, e: 'ss', n: 'smør, til formen' },
-        { m: 1, e: 'ts', n: 'salt' },
-      ]},
-      { gruppe: 'Hvit saus', rader: [
-        { m: 4, e: 'ss', n: 'smør' },
-        { m: 4, e: 'ss', n: 'hvetemel' },
-        { m: 5, e: 'dl', n: 'melk' },
-        { m: 1, e: 'dl', n: 'fløte' },
-        { m: 0.5, e: 'ts', n: 'muskatnøtt, revet' },
-        { m: 3, e: 'stk', n: 'eggeplommer' },
-      ]},
-      { gruppe: 'Sprø topp', rader: [
-        { m: 1.5, e: 'dl', n: 'grovt brødrasp' },
-        { m: 50, e: 'g', n: 'smør, smeltet' },
-        { m: 1, e: 'dl', n: 'revet vellagret hvitost' },
-      ]},
-    ],
-    steg: [
-      { t: 'Varm ovnen', d: 'Sett ovnen på 200°C over-/undervarme. En god grateng trenger en varm ovn fra start — ingen snarveier her.' },
-      { t: 'Kok opp saus', d: 'Smelt smør, rør inn mel, la boble et halvt minutt. Spe med melk og fløte mens du visper. La putre i 5 min til sausen er glatt og tykk som maling.' },
-      { t: 'Smak til', d: 'Ta av varmen. Visp inn eggeplommer én og én, muskat og salt. Sausen skal smake litt for sterkt — fisken trekker til seg smak når den steker.' },
-      { t: 'Fyll formen', d: 'Smør en ildfast form. Legg fiskeblandingen i, hell sausen over, vend forsiktig så fisken dekkes helt.' },
-      { t: 'Sprø topp', d: 'Bland brødrasp, smeltet smør og ost. Strø jevnt over gratengen — den skal se ut som en snøfonn med parmesan i.' },
-      { t: 'Gratinér', d: 'Stek i 35–40 min til toppen er gyllen og sausen bobler langs kanten. La hvile 10 min før servering — sausen trenger tid til å sette seg.' },
-    ],
-    servering: 'Med kokte gulrøtter, nypotet og en klatt rømme. Sitronbåt ved siden av, for den som vil ha en frisk skvett.',
-    par: 'Et tørt hvitvinsglass, eller kald mineralvann med sitron hvis det er tirsdag.',
-  },
-];
-
 const GM_SITAT = {
   tekst: 'God mat smaker av stedet den kom fra, hendene som lagde den, og stemningen rundt bordet. Alt annet er bare fyllstoff.',
   av: 'Redaksjonen',
 };
+
+async function lastOppskrifter() {
+  const manifest = await fetch('recipes/index.json').then(r => r.json());
+  const recipes = await Promise.all(
+    manifest.map(id => fetch(`recipes/${id}.json`).then(r => r.json()))
+  );
+  return recipes;
+}
+
+function velgIllustrasjon(r) {
+  if (r.illustrasjon === 'bolle') return IllBolle;
+  return IllTallerken;
+}
 
 // ---------- palette ----------
 const GM = {
@@ -268,10 +193,11 @@ function GMFooter() {
 
 // ---------- recipe cards ----------
 function GMKortMinimal({ r, onClick }) {
+  const Ill = velgIllustrasjon(r);
   return (
     <article onClick={onClick} style={{ cursor: 'pointer', display: 'grid', gridTemplateColumns: '140px 1fr auto', gap: 24, alignItems: 'center', padding: '24px 0', borderBottom: `1px solid ${GM.ink}20` }}>
       <div style={{ width: 140, height: 140, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
-        {r.id === 'kjottkaker' ? <IllTallerken size={110} /> : <IllBolle size={110} />}
+        <Ill size={110} />
       </div>
       <div>
         <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>{r.nr} &nbsp;·&nbsp; {r.kategori.toUpperCase()}</div>
@@ -288,13 +214,14 @@ function GMKortMinimal({ r, onClick }) {
 }
 
 function GMKortStempel({ r, onClick }) {
+  const Ill = velgIllustrasjon(r);
   return (
     <article onClick={onClick} style={{ cursor: 'pointer', background: GM.paper, border: `2px solid ${GM.ink}`, padding: 28, position: 'relative', display: 'flex', flexDirection: 'column', gap: 20, aspectRatio: '4/5' }}>
       <div style={{ position: 'absolute', top: 16, right: 16 }}>
         <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={86} />
       </div>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
-        {r.id === 'kjottkaker' ? <IllTallerken size={220} /> : <IllBolle size={220} />}
+        <Ill size={220} />
       </div>
       <div>
         <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, marginBottom: 6 }}>{r.kategori.toUpperCase()} &nbsp;·&nbsp; {r.tid.toUpperCase()}</div>
@@ -357,7 +284,8 @@ function GMKjenningsmelodi() {
   );
 }
 
-function GMHero() {
+function GMHero({ antall, hovedIll }) {
+  const Hoved = hovedIll || IllTallerken;
   return (
     <section style={{ padding: '60px 40px 40px', position: 'relative' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 40, alignItems: 'center' }}>
@@ -380,14 +308,14 @@ function GMHero() {
           <div style={{ position: 'absolute', top: -20, right: -10, transform: 'rotate(12deg)' }}>
             <IllStempel tall="✓" tekst="GOD SMAK" size={120} />
           </div>
-          <IllTallerken size={340} />
+          <Hoved size={340} />
         </div>
       </div>
       <GMRule mt={50} thick={2} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0 }}>
         {[
           { k: 'Dårlige smaker', v: '0' },
-          { k: 'Gode smaker', v: String(GM_RECIPES.length) },
+          { k: 'Gode smaker', v: String(antall) },
         ].map((s, i) => (
           <div key={s.k} style={{ padding: '20px 24px', borderRight: i < 1 ? `1px solid ${GM.ink}22` : 'none' }}>
             <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 36, color: GM.ink, lineHeight: 1 }}>{s.v}</div>
@@ -430,11 +358,12 @@ function GMSitat() {
   );
 }
 
-function GMForside({ onOpen, onSeAlle }) {
-  const utvalgt = GM_RECIPES[0];
+function GMForside({ recipes, onOpen, onSeAlle }) {
+  const utvalgt = recipes[0];
+  const UtvalgtIll = velgIllustrasjon(utvalgt);
   return (
     <>
-      <GMHero />
+      <GMHero antall={recipes.length} hovedIll={UtvalgtIll} />
       <GMSeksjonTittel
         nr="§ 01"
         tittel={<>Smaker som <span style={{ fontStyle: 'italic', color: GM.rust }}>faktisk</span> smaker.</>}
@@ -442,7 +371,7 @@ function GMForside({ onOpen, onSeAlle }) {
       />
       <section style={{ padding: '0 40px', display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 60, alignItems: 'center' }}>
         <div onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', background: GM.paper, padding: 60, aspectRatio: '5/4', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
-          <IllTallerken size={400} />
+          <UtvalgtIll size={400} />
         </div>
         <div>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>UKENS SMAK · {utvalgt.tid.toUpperCase()}</div>
@@ -455,7 +384,7 @@ function GMForside({ onOpen, onSeAlle }) {
       <section style={{ padding: '80px 40px', textAlign: 'center', borderTop: `1px solid ${GM.ink}22`, borderBottom: `1px solid ${GM.ink}22` }}>
         <GMLabel>Alle oppskriftene</GMLabel>
         <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1, margin: '20px auto 16px', color: GM.ink, maxWidth: 900, letterSpacing: '-0.02em' }}>
-          {GM_RECIPES.length} oppskrifter. <span style={{ fontStyle: 'italic', color: GM.rust }}>Null</span> dårlige.
+          {recipes.length} oppskrifter. <span style={{ fontStyle: 'italic', color: GM.rust }}>Null</span> dårlige.
         </h3>
         <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.7, maxWidth: 520, margin: '0 auto 30px' }}>
           Bla gjennom hele samlingen. Vi har tørket av tallerkenen for deg.
@@ -467,7 +396,7 @@ function GMForside({ onOpen, onSeAlle }) {
 }
 
 // ---------- oppskriftsliste ----------
-function GMOppskriftListe({ onOpen }) {
+function GMOppskriftListe({ recipes, onOpen }) {
   return (
     <>
       <section style={{ padding: '60px 40px 30px' }}>
@@ -476,13 +405,13 @@ function GMOppskriftListe({ onOpen }) {
           Hele <span style={{ fontStyle: 'italic', color: GM.rust }}>samlingen</span>.
         </h1>
         <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 560, margin: 0 }}>
-          {GM_RECIPES.length} oppskrifter som er kvalitetssikret, smakt på,
+          {recipes.length} oppskrifter som er kvalitetssikret, smakt på,
           og godkjent av minst én bestemor.
         </p>
         <GMRule mt={40} thick={2} />
       </section>
       <div style={{ padding: '0 40px' }}>
-        {GM_RECIPES.map(r => (
+        {recipes.map(r => (
           <GMKortMinimal key={r.id} r={r} onClick={() => onOpen(r.id)} />
         ))}
       </div>
@@ -533,8 +462,9 @@ function GMTimer() {
   );
 }
 
-function GMOppskrift({ id, onBack }) {
-  const r = GM_RECIPES.find(x => x.id === id) || GM_RECIPES[0];
+function GMOppskrift({ recipes, id, onBack }) {
+  const r = recipes.find(x => x.id === id) || recipes[0];
+  const Ill = velgIllustrasjon(r);
   const [porsjoner, setPorsjoner] = React.useState(r.porsjoner);
   const [krysset, setKrysset] = React.useState({});
   const [steg, setSteg] = React.useState({});
@@ -548,7 +478,7 @@ function GMOppskrift({ id, onBack }) {
 
   const toggle = (k) => setKrysset(p => ({ ...p, [k]: !p[k] }));
   const toggleSteg = (k) => setSteg(p => ({ ...p, [k]: !p[k] }));
-  const neste = GM_RECIPES.find(x => x.id !== r.id);
+  const neste = recipes.find(x => x.id !== r.id) || r;
 
   return (
     <article>
@@ -589,7 +519,7 @@ function GMOppskrift({ id, onBack }) {
             </div>
           </div>
           <div style={{ background: GM.paper, padding: 40, border: `1px solid ${GM.ink}15`, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-            {r.id === 'kjottkaker' ? <IllTallerken size={340} /> : <IllBolle size={340} />}
+            <Ill size={340} />
             <div style={{ position: 'absolute', bottom: -24, right: -24, transform: 'rotate(-8deg)' }}>
               <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={110} />
             </div>
@@ -669,10 +599,36 @@ function GMOppskrift({ id, onBack }) {
   );
 }
 
+function GMLaster() {
+  return (
+    <div style={{ padding: '120px 40px', textAlign: 'center' }}>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', color: GM.rust }}>KOKER OPP…</div>
+      <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 28, color: GM.ink, marginTop: 14 }}>Henter oppskriftene.</div>
+    </div>
+  );
+}
+
+function GMFeil({ melding }) {
+  return (
+    <div style={{ padding: '120px 40px', textAlign: 'center' }}>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', color: GM.rust }}>NOE BRANT</div>
+      <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 24, color: GM.ink, marginTop: 14, maxWidth: 560, marginInline: 'auto' }}>{melding}</div>
+    </div>
+  );
+}
+
 // ---------- app shell ----------
 function App() {
   const [side, setSide] = React.useState(() => localStorage.getItem('gm_side') || 'forside');
   const [oppskriftId, setOppskriftId] = React.useState(() => localStorage.getItem('gm_oppskrift') || 'kjottkaker');
+  const [recipes, setRecipes] = React.useState(null);
+  const [feil, setFeil] = React.useState(null);
+
+  React.useEffect(() => {
+    lastOppskrifter()
+      .then(setRecipes)
+      .catch(e => setFeil(e.message || 'Kunne ikke laste oppskriftene.'));
+  }, []);
 
   React.useEffect(() => { localStorage.setItem('gm_side', side); }, [side]);
   React.useEffect(() => { localStorage.setItem('gm_oppskrift', oppskriftId); }, [oppskriftId]);
@@ -701,14 +657,16 @@ function App() {
   return (
     <div>
       <GMNav onNav={onNav} aktiv={side === 'oppskrift' ? 'oppskrifter' : side} />
-      {side === 'forside' && (
-        <GMForside onOpen={openOppskrift} onSeAlle={() => onNav('oppskrifter')} />
+      {feil && <GMFeil melding={feil} />}
+      {!feil && !recipes && <GMLaster />}
+      {!feil && recipes && side === 'forside' && (
+        <GMForside recipes={recipes} onOpen={openOppskrift} onSeAlle={() => onNav('oppskrifter')} />
       )}
-      {side === 'oppskrifter' && (
-        <GMOppskriftListe onOpen={openOppskrift} />
+      {!feil && recipes && side === 'oppskrifter' && (
+        <GMOppskriftListe recipes={recipes} onOpen={openOppskrift} />
       )}
-      {side === 'oppskrift' && (
-        <GMOppskrift id={oppskriftId} onBack={tilbake} />
+      {!feil && recipes && side === 'oppskrift' && (
+        <GMOppskrift recipes={recipes} id={oppskriftId} onBack={tilbake} />
       )}
       <GMFooter />
     </div>
