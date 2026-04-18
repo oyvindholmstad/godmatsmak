@@ -1,0 +1,56 @@
+{
+  "id": "porkcarnitas",
+  "nr": "№ 05",
+  "navn": "Svinecarnitas",
+  "undertittel": "Langtidskokt svin som blir sprø på toppen og mør inni",
+  "kategori": "Hovedrett",
+  "tid": "3 t 30 min",
+  "porsjoner": 4,
+  "vanskelighet": "Middels",
+  "smaker": 8,
+  "smak": "Søt, syrlig, krydret, sprø",
+  "ingress": "Cola og ananasjuice høres rart ut helt til du smaker det. Kjøttet trekker seg mørt i ovnen i tre timer, sausen reduseres til sirup, og så sprøstekes kjøttet under grillen. Taco-kveld blir aldri den samme.",
+  "illustrasjon": "tallerken",
+  "bilde": "recipes/images/porkcarnitas.jpg",
+  "ingredienser": [
+    {
+      "gruppe": "Kjøttet",
+      "rader": [
+        { "m": 1, "e": "kg", "n": "nakkekoteletter, skåret i grove biter" },
+        { "m": 1, "e": "stk", "n": "løk, grovhakket" },
+        { "m": 5, "e": "stk", "n": "hvitløksfedd, knust" },
+        { "m": 2, "e": "stk", "n": "chili etter smak, i skiver" }
+      ]
+    },
+    {
+      "gruppe": "Krydder",
+      "rader": [
+        { "m": 1, "e": "ss", "n": "paprikapulver" },
+        { "m": 1, "e": "ss", "n": "malt spisskummen" },
+        { "m": 1, "e": "ts", "n": "løkpulver" },
+        { "m": 1, "e": "ts", "n": "cayennepepper (eller noen tørkede chili)" },
+        { "m": 1, "e": "ts", "n": "salt" },
+        { "m": 0.5, "e": "ts", "n": "pepper" }
+      ]
+    },
+    {
+      "gruppe": "Væske",
+      "rader": [
+        { "m": 2.5, "e": "dl", "n": "Coca-Cola (med sukker)" },
+        { "m": 2.5, "e": "dl", "n": "ananasjuice (eller annen juice du har)" },
+        { "m": 1, "e": "ss", "n": "kyllingkraft-konsentrat (valgfritt, erstatter salt)" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Forvarm og del opp", "d": "Sett ovnen på 180°C. Del nakkekotelettene i grove biter — størrelsen er ikke viktig, de skal uansett falle fra hverandre til slutt." },
+    { "t": "Brun kjøttet", "d": "Varm en jerngryte (eller dyp panne med lokk) og brun kjøttet i omganger. Ikke overfyll gryta — du vil ha farge, ikke damp. Legg det brunede kjøttet på en tallerken underveis." },
+    { "t": "Rist krydderne", "d": "Ha alt kjøttet tilbake i gryta. Dryss over paprika, spisskummen, løkpulver, cayenne, salt og pepper. Rør rundt og stek et lite minutt så krydderne våkner." },
+    { "t": "Fyll på og putre", "d": "Tilsett løk, hvitløk og chili. Hell over cola og ananasjuice — væsken skal så vidt dekke kjøttet. Tilsett litt vann om det trengs. Kok opp, legg på lokk, og sett gryta i ovnen i minst 3 timer, til kjøttet faller fra hverandre." },
+    { "t": "Sil og reduser", "d": "Sil kraften over i en kjele. La den koke inn til en tykk, glinsende saus — den skal smake som karamell og chili på én gang." },
+    { "t": "Sprøstek kjøttet", "d": "Spre kjøttet utover et stekebrett med bakepapir. Sett under grillen på høy varme til kantene blir sprø og gyllne. Følg med — det går fort." },
+    { "t": "Server", "d": "Varm sausen om den har kjølnet, og hell den over det sprøstekte kjøttet rett før servering." }
+  ],
+  "servering": "Med varme tortillas, syltet rødløk, koriander, avokado og lime. Hver gjest bygger sin egen taco.",
+  "par": "Kald mexicansk lager som Modelo eller Pacifico, eller en margarita hvis det er fredag."
+}

@@ -46,6 +46,23 @@ function velgIllustrasjon(r) {
   return IllTallerken;
 }
 
+function RecipeBilde({ r, size, runde }) {
+  if (r.bilde) {
+    return (
+      <img
+        src={r.bilde}
+        alt={r.navn}
+        style={{
+          width: size, height: size, objectFit: 'cover', display: 'block',
+          borderRadius: runde ? '50%' : 0,
+        }}
+      />
+    );
+  }
+  const Ill = velgIllustrasjon(r);
+  return <Ill size={size} />;
+}
+
 // ---------- palette ----------
 const GM = {
   cream: '#EFE8DA',
@@ -309,11 +326,10 @@ function GMFooter({ onNav }) {
 
 // ---------- recipe cards ----------
 function GMKortMinimal({ r, onClick }) {
-  const Ill = velgIllustrasjon(r);
   return (
     <article onClick={onClick} style={{ cursor: 'pointer', display: 'grid', gridTemplateColumns: '140px 1fr auto', gap: 24, alignItems: 'center', padding: '24px 0', borderBottom: `1px solid ${GM.ink}20` }}>
-      <div style={{ width: 140, height: 140, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
-        <Ill size={110} />
+      <div style={{ width: 140, height: 140, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15`, overflow: 'hidden' }}>
+        <RecipeBilde r={r} size={r.bilde ? 140 : 110} />
       </div>
       <div>
         <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>{r.nr} &nbsp;·&nbsp; {r.kategori.toUpperCase()}</div>
@@ -322,7 +338,7 @@ function GMKortMinimal({ r, onClick }) {
       </div>
       <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.18em', color: GM.ink, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
         <span>{r.tid.toUpperCase()}</span>
-        <span style={{ opacity: 0.5 }}>{r.vanskelighet.toUpperCase()}</span>
+        <span style={{ opacity: 0.5 }}>{r.smaker} SMAKER</span>
         <span style={{ marginTop: 10, color: GM.rust }}>LES →</span>
       </div>
     </article>
@@ -330,14 +346,13 @@ function GMKortMinimal({ r, onClick }) {
 }
 
 function GMKortStempel({ r, onClick }) {
-  const Ill = velgIllustrasjon(r);
   return (
     <article onClick={onClick} style={{ cursor: 'pointer', background: GM.paper, border: `2px solid ${GM.ink}`, padding: 28, position: 'relative', display: 'flex', flexDirection: 'column', gap: 20, aspectRatio: '4/5' }}>
-      <div style={{ position: 'absolute', top: 16, right: 16 }}>
+      <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}>
         <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={86} />
       </div>
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
-        <Ill size={220} />
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 20, overflow: 'hidden' }}>
+        <RecipeBilde r={r} size={220} />
       </div>
       <div>
         <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, marginBottom: 6 }}>{r.kategori.toUpperCase()} &nbsp;·&nbsp; {r.tid.toUpperCase()}</div>
@@ -486,8 +501,14 @@ function GMForside({ recipes, onOpen, onSeAlle }) {
         undertittel="Ingen snarveier. Ingen ironi på bekostning av osten. Bare oppskrifter som kommer ut av kjøkkenet og smaker som de lover."
       />
       <section style={{ padding: '0 40px', display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 60, alignItems: 'center' }}>
-        <div onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', background: GM.paper, padding: 60, aspectRatio: '5/4', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
-          <UtvalgtIll size={400} />
+        <div onClick={() => onOpen(utvalgt.id)} style={{
+          cursor: 'pointer', background: GM.paper, padding: utvalgt.bilde ? 0 : 60,
+          aspectRatio: '5/4', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          border: `1px solid ${GM.ink}15`, overflow: 'hidden',
+        }}>
+          {utvalgt.bilde
+            ? <img src={utvalgt.bilde} alt={utvalgt.navn} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            : <UtvalgtIll size={400} />}
         </div>
         <div>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>UKENS SMAK · {utvalgt.tid.toUpperCase()}</div>
@@ -625,7 +646,7 @@ function GMOppskrift({ recipes, id, onBack }) {
                 ['Tid', r.tid],
                 ['Porsjoner', r.porsjoner + ' stk'],
                 ['Smak', r.smak],
-                ['Nivå', r.vanskelighet],
+                ['Smaker', r.smaker],
               ].map(([k, v]) => (
                 <div key={k}>
                   <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.5, marginBottom: 6 }}>{k.toUpperCase()}</div>
@@ -634,9 +655,16 @@ function GMOppskrift({ recipes, id, onBack }) {
               ))}
             </div>
           </div>
-          <div style={{ background: GM.paper, padding: 40, border: `1px solid ${GM.ink}15`, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-            <Ill size={340} />
-            <div style={{ position: 'absolute', bottom: -24, right: -24, transform: 'rotate(-8deg)' }}>
+          <div style={{
+            background: GM.paper, padding: r.bilde ? 0 : 40,
+            border: `1px solid ${GM.ink}15`, aspectRatio: '1',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            {r.bilde
+              ? <img src={r.bilde} alt={r.navn} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              : <Ill size={340} />}
+            <div style={{ position: 'absolute', bottom: -24, right: -24, transform: 'rotate(-8deg)', zIndex: 1 }}>
               <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={110} />
             </div>
           </div>

@@ -1,0 +1,51 @@
+{
+  "id": "kokoskarrysuppe",
+  "nr": "№ 04",
+  "navn": "Kokoskarry-suppe med nudler",
+  "undertittel": "Femten minutter til middag som smaker som restaurant",
+  "kategori": "Suppe",
+  "tid": "15 min",
+  "porsjoner": 3,
+  "vanskelighet": "Enkel",
+  "smaker": 8,
+  "smak": "Kremet, syrlig, sterk, umami",
+  "ingress": "En kokosbasert nudelsuppe med thai-rød karry som lever av kontraster: kremet kokos, syrlig lime, salt fiskesaus og varme fra karrypastaen. Hele greia er ferdig på et kvarter — perfekt når du vil ha noe som smaker mye uten å gjøre mye.",
+  "illustrasjon": "bolle",
+  "bilde": "recipes/images/kokoskarrysuppe.jpg",
+  "ingredienser": [
+    {
+      "gruppe": "Suppen",
+      "rader": [
+        { "m": 2, "e": "ss", "n": "olje" },
+        { "m": 3, "e": "stk", "n": "hvitløksfedd, hakket" },
+        { "m": 1, "e": "ss", "n": "fersk ingefær, revet" },
+        { "m": 3, "e": "ss", "n": "thai rød karrypaste" },
+        { "m": 225, "e": "g", "n": "kyllingfilet eller -lår, i skiver" },
+        { "m": 9.5, "e": "dl", "n": "kyllingbuljong" },
+        { "m": 2.5, "e": "dl", "n": "vann" },
+        { "m": 2, "e": "ss", "n": "fiskesaus" },
+        { "m": 1.5, "e": "dl", "n": "kokosmelk" },
+        { "m": 170, "e": "g", "n": "tørkede risnudler (vermicelli)" }
+      ]
+    },
+    {
+      "gruppe": "Topping",
+      "rader": [
+        { "m": 1, "e": "stk", "n": "lime, i båter" },
+        { "m": 0.5, "e": "stk", "n": "rødløk, i tynne skiver" },
+        { "m": 1, "e": "stk", "n": "rød chili, i ringer" },
+        { "m": 0.5, "e": "bunt", "n": "koriander" },
+        { "m": 2, "e": "stk", "n": "vårløk, i ringer" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Frest karrypastaen", "d": "Varm olje i en stor kjele på middels varme. Tilsett hvitløk, ingefær og rød karrypaste. Frest i 5 minutter til det dufter fra kjelen — dette er der suppen får dybden sin." },
+    { "t": "Brun kyllingen", "d": "Tilsett kyllingen og rør rundt i ca. 2 minutter, til kjøttet er ugjennomsiktig på utsiden. Ikke stress — det skal trekke ferdig i kraften etterpå." },
+    { "t": "Spe med kraft", "d": "Hell i kyllingbuljong, vann, fiskesaus og kokosmelk. Kok opp og smak til. Trenger den mer salt? Mer fiskesaus. Mer syrlighet? Spar limen til slutt." },
+    { "t": "Hell over nudlene", "d": "Legg de tørre risnudlene direkte i serveringsbollene. Hell den kokende suppen over — nudlene blir myke i løpet av et par minutter. Eller kok dem i kraften før servering om du foretrekker det." },
+    { "t": "Topp og server", "d": "Press lime over hver bolle. Strø over rødløk, chili, koriander og vårløk. Server umiddelbart, mens dampen fortsatt stiger." }
+  ],
+  "servering": "Direkte fra kjelen til bollen, med toppingene innen rekkevidde slik at hver gjest kan justere syrlighet og styrke selv.",
+  "par": "En kald lager eller et glass riesling med litt restsødme. Eller bare iskald limonade om barna skal være med."
+}

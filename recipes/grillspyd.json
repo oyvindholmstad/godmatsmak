@@ -7,9 +7,11 @@
   "tid": "3 t (med marinering)",
   "porsjoner": 4,
   "vanskelighet": "Middels",
+  "smaker": 9,
   "smak": "Syrlig, salt, søt, umami",
   "ingress": "Thai-inspirerte spyd som får en gyllen skorpe på grillen og en crack-saus som lever opp til navnet. Syltet agurk-salat på siden gjør det hele til en treenighet du vil lage igjen neste uke.",
   "illustrasjon": "tallerken",
+  "bilde": "recipes/images/grillspyd.jpg",
   "ingredienser": [
     {
       "gruppe": "Grillspyd",
