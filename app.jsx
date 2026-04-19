@@ -634,6 +634,42 @@ function formaterMengde(m, faktor) {
   return (Math.round(n * 10) / 10).toString().replace('.', ',');
 }
 
+function GMDelKnapp({ navn }) {
+  const [tilstand, setTilstand] = React.useState('idle');
+
+  const del = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: navn, url });
+        return;
+      } catch (e) {
+        if (e && e.name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setTilstand('kopiert');
+      setTimeout(() => setTilstand('idle'), 2000);
+    } catch {
+      setTilstand('feil');
+      setTimeout(() => setTilstand('idle'), 2000);
+    }
+  };
+
+  const etikett = tilstand === 'kopiert' ? 'KOPIERT ✓'
+    : tilstand === 'feil' ? 'KUNNE IKKE KOPIERE'
+    : 'DEL OPPSKRIFT →';
+
+  return (
+    <button onClick={del} style={{
+      background: 'none', border: `1px solid ${GM.ink}`, cursor: 'pointer',
+      padding: '6px 12px', borderRadius: 999, color: GM.ink,
+      fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.18em',
+    }}>{etikett}</button>
+  );
+}
+
 function GMVakenSkjerm() {
   const stottes = typeof navigator !== 'undefined' && 'wakeLock' in navigator;
   const [vil, setVil] = React.useState(false);
@@ -789,7 +825,10 @@ function GMOppskrift({ recipes, id, onBack }) {
   return (
     <article>
       <section style={{ padding: mobil ? '24px 16px 36px' : '40px 40px 60px', position: 'relative' }}>
-        <button onClick={() => onBack()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.ink, marginBottom: mobil ? 20 : 30 }}>← TILBAKE</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: mobil ? 20 : 30 }}>
+          <button onClick={() => onBack()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.ink }}>← TILBAKE</button>
+          <GMDelKnapp navn={r.navn} />
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: mobil ? '1fr' : '1.3fr 1fr', gap: mobil ? 28 : 60, alignItems: 'center' }}>
           <div>
@@ -933,10 +972,35 @@ function GMFeil({ melding }) {
   );
 }
 
+// ---------- routing ----------
+function parseHash(hash) {
+  const h = (hash || '').replace(/^#\/?/, '');
+  if (!h) return { side: 'forside', id: null };
+  const [seg, id] = h.split('/');
+  if (seg === 'oppskrift' && id) return { side: 'oppskrift', id };
+  if (seg === 'oppskrifter') return { side: 'oppskrifter', id: null };
+  return { side: 'forside', id: null };
+}
+
+function lagHash({ side, id }) {
+  if (side === 'oppskrift' && id) return `#/oppskrift/${id}`;
+  if (side === 'oppskrifter') return `#/oppskrifter`;
+  return `#/`;
+}
+
+function navigerTil(state, { replace } = {}) {
+  const next = lagHash(state);
+  if (typeof window === 'undefined') return;
+  if (window.location.hash === next) return;
+  if (replace) window.history.replaceState(null, '', next);
+  else window.history.pushState(null, '', next);
+}
+
 // ---------- app shell ----------
 function App() {
-  const [side, setSide] = React.useState(() => localStorage.getItem('gm_side') || 'forside');
-  const [oppskriftId, setOppskriftId] = React.useState(() => localStorage.getItem('gm_oppskrift') || 'kjottkaker');
+  const init = parseHash(typeof window !== 'undefined' ? window.location.hash : '');
+  const [side, setSide] = React.useState(init.side);
+  const [oppskriftId, setOppskriftId] = React.useState(init.id || 'kjottkaker');
   const [recipes, setRecipes] = React.useState(null);
   const [filosofi, setFilosofi] = React.useState(null);
   const [sitatNr, setSitatNr] = React.useState(1);
@@ -954,8 +1018,27 @@ function App() {
       .catch(() => {});
   }, []);
 
-  React.useEffect(() => { localStorage.setItem('gm_side', side); }, [side]);
-  React.useEffect(() => { localStorage.setItem('gm_oppskrift', oppskriftId); }, [oppskriftId]);
+  // Make sure the address bar reflects the current state on first load
+  // (e.g. visiting "/" — normalize to "#/").
+  React.useEffect(() => {
+    navigerTil({ side, id: oppskriftId }, { replace: true });
+  }, []);
+
+  // Back/forward navigation
+  React.useEffect(() => {
+    const onPop = () => {
+      const next = parseHash(window.location.hash);
+      setSide(next.side);
+      if (next.id) setOppskriftId(next.id);
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('popstate', onPop);
+    window.addEventListener('hashchange', onPop);
+    return () => {
+      window.removeEventListener('popstate', onPop);
+      window.removeEventListener('hashchange', onPop);
+    };
+  }, []);
 
   React.useEffect(() => {
     if (side === 'forside') document.title = 'God Matsmak — Mat som smaker';
@@ -965,22 +1048,25 @@ function App() {
   const openOppskrift = (id) => {
     setOppskriftId(id);
     setSide('oppskrift');
+    navigerTil({ side: 'oppskrift', id });
     window.scrollTo(0, 0);
   };
 
   const tilbake = (maybeId) => {
     if (typeof maybeId === 'string') {
       setOppskriftId(maybeId);
+      navigerTil({ side: 'oppskrift', id: maybeId });
       window.scrollTo(0, 0);
       return;
     }
     setSide('oppskrifter');
+    navigerTil({ side: 'oppskrifter' });
     window.scrollTo(0, 0);
   };
 
   const onNav = (s) => {
-    if (s === 'forside') { setSide('forside'); window.scrollTo(0, 0); }
-    else if (s === 'oppskrifter') { setSide('oppskrifter'); window.scrollTo(0, 0); }
+    if (s === 'forside') { setSide('forside'); navigerTil({ side: 'forside' }); window.scrollTo(0, 0); }
+    else if (s === 'oppskrifter') { setSide('oppskrifter'); navigerTil({ side: 'oppskrifter' }); window.scrollTo(0, 0); }
   };
 
   return (
