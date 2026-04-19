@@ -1,15 +1,14 @@
 // ---------- data ----------
-const GM_SITAT = {
-  tekst: 'God mat smaker av stedet den kom fra, hendene som lagde den, og stemningen rundt bordet. Alt annet er bare fyllstoff.',
-  av: 'En god matsmaker',
-};
-
 async function lastOppskrifter() {
   const manifest = await fetch('recipes/index.json').then(r => r.json());
   const recipes = await Promise.all(
     manifest.map(id => fetch(`recipes/${id}.json`).then(r => r.json()))
   );
   return recipes;
+}
+
+async function lastFilosofi() {
+  return fetch('kjokkenfilosofi.json').then(r => r.json());
 }
 
 function velgIllustrasjon(r) {
@@ -508,22 +507,24 @@ function GMSeksjonTittel({ nr, tittel, undertittel }) {
   );
 }
 
-function GMSitat() {
+function GMSitat({ sitat, nr }) {
   const mobil = useIsMobile();
+  if (!sitat) return null;
+  const nrStr = String(nr ?? 1).padStart(2, '0');
   return (
     <section style={{ background: GM.ink, color: GM.cream, padding: mobil ? '60px 20px' : '100px 40px', textAlign: 'center', margin: mobil ? '40px 0' : '60px 0', position: 'relative' }}>
-      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.5, marginBottom: 30 }}>KJØKKENFILOSOFI №01</div>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.5, marginBottom: 30 }}>KJØKKENFILOSOFI №{nrStr}</div>
       <blockquote style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(28px, 4vw, 52px)', lineHeight: 1.15, maxWidth: 1000, margin: '0 auto', fontStyle: 'italic', letterSpacing: '-0.01em' }}>
         <span style={{ color: GM.rust, fontSize: '1.2em' }}>«</span>
-        {GM_SITAT.tekst}
+        {sitat.tekst}
         <span style={{ color: GM.rust, fontSize: '1.2em' }}>»</span>
       </blockquote>
-      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.6, marginTop: 30 }}>— {GM_SITAT.av.toUpperCase()}</div>
+      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.6, marginTop: 30 }}>— {sitat.av.toUpperCase()}</div>
     </section>
   );
 }
 
-function GMForside({ recipes, onOpen, onSeAlle }) {
+function GMForside({ recipes, onOpen, onSeAlle, sitat, sitatNr }) {
   const utvalgt = recipes[0];
   const UtvalgtIll = velgIllustrasjon(utvalgt);
   const mobil = useIsMobile();
@@ -552,7 +553,7 @@ function GMForside({ recipes, onOpen, onSeAlle }) {
           <button onClick={() => onOpen(utvalgt.id)} style={{ marginTop: 28, padding: '12px 22px', cursor: 'pointer', background: GM.ink, color: GM.cream, border: 'none', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em' }}>LES OPPSKRIFTEN →</button>
         </div>
       </section>
-      <GMSitat />
+      <GMSitat sitat={sitat} nr={sitatNr} />
       <section style={{ padding: mobil ? '50px 16px' : '80px 40px', textAlign: 'center', borderTop: `1px solid ${GM.ink}22`, borderBottom: `1px solid ${GM.ink}22` }}>
         <GMLabel>Alle oppskriftene</GMLabel>
         <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(32px, 7vw, 64px)', lineHeight: 1, margin: '20px auto 16px', color: GM.ink, maxWidth: 900, letterSpacing: '-0.02em' }}>
@@ -881,12 +882,20 @@ function App() {
   const [side, setSide] = React.useState(() => localStorage.getItem('gm_side') || 'forside');
   const [oppskriftId, setOppskriftId] = React.useState(() => localStorage.getItem('gm_oppskrift') || 'kjottkaker');
   const [recipes, setRecipes] = React.useState(null);
+  const [filosofi, setFilosofi] = React.useState(null);
+  const [sitatNr, setSitatNr] = React.useState(1);
   const [feil, setFeil] = React.useState(null);
 
   React.useEffect(() => {
     lastOppskrifter()
       .then(setRecipes)
       .catch(e => setFeil(e.message || 'Kunne ikke laste oppskriftene.'));
+    lastFilosofi()
+      .then(arr => {
+        setFilosofi(arr);
+        setSitatNr(Math.floor(Math.random() * arr.length) + 1);
+      })
+      .catch(() => {});
   }, []);
 
   React.useEffect(() => { localStorage.setItem('gm_side', side); }, [side]);
@@ -919,7 +928,13 @@ function App() {
       {feil && <GMFeil melding={feil} />}
       {!feil && !recipes && <GMLaster />}
       {!feil && recipes && side === 'forside' && (
-        <GMForside recipes={recipes} onOpen={openOppskrift} onSeAlle={() => onNav('oppskrifter')} />
+        <GMForside
+          recipes={recipes}
+          onOpen={openOppskrift}
+          onSeAlle={() => onNav('oppskrifter')}
+          sitat={filosofi ? filosofi[sitatNr - 1] : null}
+          sitatNr={sitatNr}
+        />
       )}
       {!feil && recipes && side === 'oppskrifter' && (
         <GMOppskriftListe recipes={recipes} onOpen={openOppskrift} />
