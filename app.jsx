@@ -939,6 +939,15 @@ function GMOppskrift({ recipes, id, onBack }) {
           <GMLabel nr="§ D">Drikk til</GMLabel>
           <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 22 : 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.par}</p>
         </div>
+        {r.kilde && (
+          <div style={{ gridColumn: mobil ? undefined : '1 / -1', borderTop: `1px solid ${GM.ink}18`, paddingTop: 20 }}>
+            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.5 }}>KILDE: </span>
+            {r.kilde.lenke
+              ? <a href={r.kilde.lenke} target="_blank" rel="noopener noreferrer" style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, textDecoration: 'none' }}>{r.kilde.tekst} →</a>
+              : <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.5 }}>{r.kilde.tekst}</span>
+            }
+          </div>
+        )}
       </section>
 
       <section style={{ padding: mobil ? '36px 16px' : '60px 40px', background: GM.ink, color: GM.cream }}>
