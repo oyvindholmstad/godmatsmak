@@ -1,5 +1,5 @@
 // ---------- seo ----------
-const GM_BASE_URL = 'https://oyvindholmstad.github.io/godmatsmak';
+const GM_BASE_URL = 'https://godmatsmak.no';
 
 function tidTilISO(tid) {
   const t = tid.toLowerCase();

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://oyvindholmstad.github.io/godmatsmak/sitemap.xml
+Sitemap: https://godmatsmak.no/sitemap.xml
