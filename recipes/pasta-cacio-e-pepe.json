@@ -1,0 +1,39 @@
+{
+  "id": "pasta-cacio-e-pepe",
+  "nr": "№ 06",
+  "navn": "Pasta cacio e pepe",
+  "undertittel": "Tre ingredienser. Null kompromisser",
+  "kategori": "middagsmak",
+  "tid": "20 min",
+  "porsjoner": 2,
+  "vanskelighet": "Middels",
+  "smaker": 6,
+  "smak": "Salt, umami, skarp, kremet",
+  "ingress": "Ingen saus. Ingen fløte. Bare pasta, pecorino og svart pepper — og teknikken som skiller en romersk klassiker fra en klump med smeltet ost. Pastavannet er hemmeligheten. Pepperen er poenget.",
+  "illustrasjon": "bolle",
+  "ingredienser": [
+    {
+      "gruppe": "Pasta",
+      "rader": [
+        { "m": 200, "e": "g", "n": "spaghetti eller tonnarelli" },
+        { "m": 1, "e": "ss", "n": "grovt salt (til pastavannet)" }
+      ]
+    },
+    {
+      "gruppe": "Sausen",
+      "rader": [
+        { "m": 100, "e": "g", "n": "pecorino romano, fint revet (+ litt ekstra til servering)" },
+        { "m": 2, "e": "ts", "n": "svart pepper, grovmalt" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Kok pasta i lite vann", "d": "Bruk en mindre kjele enn du tror du trenger — mer stivelse i vannet betyr bedre saus. Salt vannet lett: pecorino er salt nok. Kok pasta til al dente." },
+    { "t": "Rist pepperen", "d": "Varm en vid panne på middels varme uten olje. Ha i pepperen og rist i 30 sekunder til den dufter. Pepperen skal blomstre, ikke brenne." },
+    { "t": "Lag ostebasen", "d": "Riv pecorino fint — jo finere, jo glattere saus. Ha osten i en bolle og tilsett en øse pastavann mens du rører. Det skal bli en tykk, glatt krem. Gjør dette av varmen — for høy temperatur klumper osten." },
+    { "t": "Avslutt i panna", "d": "Løft pastaen rett fra vannet og over i pepperpanna med litt vann hengenes. Rør og sleng. Skru av varmen, tilsett ostekremen og rør raskt. Tilsett mer pastavann, skje for skje, til sausen kler hvert eneste stråhår med silkemyk glans." },
+    { "t": "Server umiddelbart", "d": "Cacio e pepe venter ikke. Anrett i varme skåler, kvern over mer pepper og rasp over litt ekstra pecorino. Spis mens du ennå kan høre det suse." }
+  ],
+  "servering": "Alene, i en varm skål, med et glass hvitvin i hånden. Ingen salat. Ingen brød. Ingenting som stjeler oppmerksomheten.",
+  "par": "En sprø Frascati eller Verdicchio — noe tørt og mineralsk fra Lazio eller Marche. Eller den billigste anstendige hvite du finner."
+}
