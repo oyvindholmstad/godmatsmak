@@ -68,5 +68,9 @@
     { "t": "Grill og server", "d": "Grill spydene i ca. 3–4 minutter per side, til kjøttet har fått gyllen farge og er gjennomstekt. Server med ris, crack-saus og syltet thaisalat på siden." }
   ],
   "servering": "Med dampet ris, en generøs skvett crack-saus og en frisk haug syltet thaisalat ved siden av.",
-  "par": "Kald pils, eller en lett og litt søt riesling om du vil matche syrligheten i sausen."
+  "par": "Kald pils, eller en lett og litt søt riesling om du vil matche syrligheten i sausen.",
+  "kilde": {
+    "tekst": "fysenpaa @ instagram",
+    "lenke": "https://www.instagram.com/p/DM1_Gc2qJ42/"
+  }
 }
