@@ -1,5 +1,24 @@
 # God Matsmak — project notes
 
+## What this is
+
+A Norwegian-language personal recipe site. The motto on the front page is "Mat som smaker. Food which tastes." — a deliberately stiff translation that's part of the joke. The visual language is 1920s editorial: ivory paper background, a single rust accent, Libre Caslon Text for serifs, Space Grotesk for body, JetBrains Mono for stamps and labels. Recurring "GOD SMAK" stamps and section markers like "§ 01" / "№ 03" are part of the identity, not decoration to strip out.
+
+The conceit is that there are no bad recipes here, only good ones. The forside boasts "Dårlige smaker: 0 / Gode smaker: N", and the kjøkkenfilosofi quotes lean poetic-cheeky — confident, slightly absurd, never ironic at the food's expense.
+
+## Voice and tone
+
+When writing recipe copy (`undertittel`, `ingress`, step `t`/`d`, `servering`, `par`) or new philosophy quotes:
+
+- **Norwegian, written like a confident friend** — not a cookbook editor, not a food blogger.
+- **Sensory specifics over adjectives** — "sausen skal være tykk som maling" beats "sausen skal være tykk".
+- **Cheeky asides allowed, sincerity wins** — the dish is the hero. Jokes that punch down on the food don't make it in.
+- **Concrete tells you why** — explain the *because* in steps when it's load-bearing ("saltet trekker ut proteinene, og det er derfor kakene blir saftige"). Skip the *because* when it's obvious.
+- **Short over long** — undertittel is one line. Ingress is 2–4 sentences. Step descriptions earn their length.
+- **Never break the fourth wall about being a recipe site** — no "in this recipe we will…", no "scroll down to see…".
+
+When in doubt, read `recipes/grillspyd.json` and `recipes/kjottkaker.json` — those set the tone.
+
 ## "Antall smaker" (smaker field on recipes)
 
 Each recipe has a `smaker` integer that counts the distinct flavor dimensions the dish actually delivers. It is derived from **ingredients + cooking method together**, not just the ingredient list.
