@@ -234,7 +234,6 @@ function GMSok({ recipes, onOpen, onLukk }) {
             Ingen treff. Prøv «fiskesaus», «saus» eller «mormor».
           </div>
         ) : treff.map(r => {
-          const Ill = velgIllustrasjon(r);
           return (
             <button key={r.id} onClick={() => onOpen(r.id)} style={{
               display: 'grid', gridTemplateColumns: '48px 1fr auto', gap: 14,
@@ -245,8 +244,8 @@ function GMSok({ recipes, onOpen, onLukk }) {
               onMouseEnter={e => e.currentTarget.style.background = GM.paper}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
-              <div style={{ width: 48, height: 48, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15` }}>
-                <Ill size={38} />
+              <div style={{ width: 48, height: 48, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15`, overflow: 'hidden' }}>
+                <RecipeBilde r={r} size={48} />
               </div>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 18, color: GM.ink, lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.navn}</div>
