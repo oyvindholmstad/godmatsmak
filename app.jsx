@@ -615,6 +615,80 @@ function formaterMengde(m, faktor) {
   return (Math.round(n * 10) / 10).toString().replace('.', ',');
 }
 
+function GMVakenSkjerm() {
+  const stottes = typeof navigator !== 'undefined' && 'wakeLock' in navigator;
+  const [vil, setVil] = React.useState(false);
+  const [aktiv, setAktiv] = React.useState(false);
+  const lockRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!stottes) return;
+
+    let cancelled = false;
+
+    const slipp = async () => {
+      const l = lockRef.current;
+      lockRef.current = null;
+      setAktiv(false);
+      if (l) { try { await l.release(); } catch {} }
+    };
+
+    const skaff = async () => {
+      if (lockRef.current || document.visibilityState !== 'visible') return;
+      try {
+        const l = await navigator.wakeLock.request('screen');
+        if (cancelled || !vil) { try { await l.release(); } catch {} return; }
+        lockRef.current = l;
+        setAktiv(true);
+        l.addEventListener('release', () => {
+          if (lockRef.current === l) {
+            lockRef.current = null;
+            setAktiv(false);
+          }
+        });
+      } catch {
+        setAktiv(false);
+      }
+    };
+
+    if (vil) skaff(); else slipp();
+
+    const onVis = () => { if (vil && document.visibilityState === 'visible') skaff(); };
+    document.addEventListener('visibilitychange', onVis);
+
+    return () => {
+      cancelled = true;
+      document.removeEventListener('visibilitychange', onVis);
+      slipp();
+    };
+  }, [vil, stottes]);
+
+  if (!stottes) return null;
+
+  return (
+    <button
+      onClick={() => setVil(v => !v)}
+      aria-pressed={aktiv}
+      title={aktiv ? 'Skjermen holdes våken' : 'Skjermen kan slukke'}
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 8,
+        background: aktiv ? GM.rust : 'transparent',
+        color: aktiv ? GM.cream : GM.ink,
+        border: `1px solid ${aktiv ? GM.rust : GM.ink}`,
+        cursor: 'pointer', padding: '8px 12px',
+        fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em',
+      }}
+    >
+      <span aria-hidden="true" style={{
+        width: 8, height: 8, borderRadius: '50%',
+        background: aktiv ? GM.cream : 'transparent',
+        border: `1px solid ${aktiv ? GM.cream : GM.ink}`,
+      }} />
+      HOLD SKJERMEN PÅ
+    </button>
+  );
+}
+
 function GMTimer() {
   const mobil = useIsMobile();
   const [sek, setSek] = React.useState(0);
@@ -737,7 +811,10 @@ function GMOppskrift({ recipes, id, onBack }) {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
               <GMLabel nr="§ B">Slik gjør du</GMLabel>
-              <GMTimer />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <GMVakenSkjerm />
+                <GMTimer />
+              </div>
             </div>
             <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {r.steg.map((s, i) => {
