@@ -52,8 +52,5 @@
     { "t": "Server", "d": "Varm sausen om den har kjølnet, og hell den over det sprøstekte kjøttet rett før servering." }
   ],
   "servering": "Med varme tortillas, syltet rødløk, koriander, avokado og lime. Hver gjest bygger sin egen taco.",
-  "par": "Kald mexicansk lager som Modelo eller Pacifico, eller en margarita hvis det er fredag.",
-  "kilde": {
-    "tekst": "Serious Eats — J. Kenji López-Alt"
-  }
+  "par": "Kald mexicansk lager som Modelo eller Pacifico, eller en margarita hvis det er fredag."
 }
