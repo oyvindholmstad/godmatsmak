@@ -234,7 +234,6 @@ function GMSok({ recipes, onOpen, onLukk }) {
             Ingen treff. Prøv «fiskesaus», «saus» eller «mormor».
           </div>
         ) : treff.map(r => {
-          const Ill = velgIllustrasjon(r);
           return (
             <button key={r.id} onClick={() => onOpen(r.id)} style={{
               display: 'grid', gridTemplateColumns: '48px 1fr auto', gap: 14,
