@@ -4,7 +4,7 @@ A small Norwegian recipe site. Mat som smaker. Food which tastes.
 
 🌐 **Live:** https://godmatsmak.no
 
-The conceit is that there are no bad recipes here, only good ones. Each recipe gets a "smaker" count — how many distinct flavor dimensions the dish actually delivers. The forside picks a random kjøkkenfilosofi quote on every visit. The visual language is 1920s editorial: ivory paper, a single rust accent, serif headlines, monospaced stamps.
+The conceit is that there are no bad recipes here, only good ones. Each recipe gets a "smaker" count — how many distinct flavor dimensions the dish actually delivers. 
 
 ## Develop
 
