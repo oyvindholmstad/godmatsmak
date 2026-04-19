@@ -11,6 +11,13 @@ async function lastFilosofi() {
   return fetch('kjokkenfilosofi.json').then(r => r.json());
 }
 
+function dagensIndeks(antall) {
+  if (!antall) return 0;
+  const d = new Date();
+  const dager = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+  return ((dager % antall) + antall) % antall;
+}
+
 function velgIllustrasjon(r) {
   if (r.illustrasjon === 'bolle') return IllBolle;
   return IllTallerken;
@@ -525,7 +532,7 @@ function GMSitat({ sitat, nr }) {
 }
 
 function GMForside({ recipes, onOpen, onSeAlle, sitat, sitatNr }) {
-  const utvalgt = recipes[0];
+  const utvalgt = recipes[dagensIndeks(recipes.length)];
   const UtvalgtIll = velgIllustrasjon(utvalgt);
   const mobil = useIsMobile();
   return (
@@ -547,7 +554,7 @@ function GMForside({ recipes, onOpen, onSeAlle, sitat, sitatNr }) {
             : <UtvalgtIll size={mobil ? 240 : 400} />}
         </div>
         <div>
-          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>UKENS SMAK · {utvalgt.tid.toUpperCase()}</div>
+          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>DAGENS SMAK · {utvalgt.tid.toUpperCase()}</div>
           <h3 onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(34px, 7vw, 68px)', lineHeight: 0.95, margin: '14px 0 18px', color: GM.ink, letterSpacing: '-0.02em' }}>{utvalgt.navn}</h3>
           <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 460 }}>{utvalgt.ingress}</p>
           <button onClick={() => onOpen(utvalgt.id)} style={{ marginTop: 28, padding: '12px 22px', cursor: 'pointer', background: GM.ink, color: GM.cream, border: 'none', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em' }}>LES OPPSKRIFTEN →</button>
