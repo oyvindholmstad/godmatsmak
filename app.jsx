@@ -819,7 +819,8 @@ function GMOppskrift({ recipes, id, onBack }) {
 
   const toggle = (k) => setKrysset(p => ({ ...p, [k]: !p[k] }));
   const toggleSteg = (k) => setSteg(p => ({ ...p, [k]: !p[k] }));
-  const neste = recipes.find(x => x.id !== r.id) || r;
+  const idx = recipes.findIndex(x => x.id === r.id);
+  const neste = recipes[(idx + 1) % recipes.length];
 
   return (
     <article>
