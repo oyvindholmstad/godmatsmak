@@ -11,6 +11,7 @@
   "smak": "Kremet, salt, smør-gyllent",
   "ingress": "Fiskegrateng har ufortjent dårlig rykte fordi noen bestemte seg for å servere den grå. Denne er gyllen, kremet i midten og har en topp som knaser som en frossen pytt i januar.",
   "illustrasjon": "bolle",
+  "bilde": "recipes/images/fiskegrateng.jpg",
   "ingredienser": [
     {
       "gruppe": "Fisk og form",

@@ -17,6 +17,7 @@
   }
   * { box-sizing: border-box; }
   button:focus, input:focus { outline: 2px solid #8B2D1F; outline-offset: 2px; }
+  img { max-width: 100%; height: auto; }
 </style>
 </head>
 <body>
@@ -61,6 +62,17 @@ function RecipeBilde({ r, size, runde }) {
   }
   const Ill = velgIllustrasjon(r);
   return <Ill size={size} />;
+}
+
+// ---------- responsive ----------
+function useIsMobile(bp = 760) {
+  const [m, setM] = React.useState(() => typeof window !== 'undefined' && window.innerWidth < bp);
+  React.useEffect(() => {
+    const onR = () => setM(window.innerWidth < bp);
+    window.addEventListener('resize', onR);
+    return () => window.removeEventListener('resize', onR);
+  }, [bp]);
+  return m;
 }
 
 // ---------- palette ----------
@@ -183,8 +195,8 @@ function GMSok({ recipes, onOpen, onLukk }) {
 
   return (
     <div style={{
-      position: 'absolute', top: 'calc(100% + 1px)', right: 40,
-      width: 'min(480px, calc(100vw - 80px))',
+      position: 'absolute', top: 'calc(100% + 1px)', right: 0,
+      width: 'min(480px, calc(100vw - 32px))',
       background: GM.cream, border: `2px solid ${GM.ink}`,
       boxShadow: `6px 6px 0 ${GM.ink}`, zIndex: 20,
     }}>
@@ -241,6 +253,7 @@ function GMSok({ recipes, onOpen, onLukk }) {
 }
 
 function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
+  const mobil = useIsMobile();
   const [sokOpen, setSokOpen] = React.useState(false);
   const wrapRef = React.useRef(null);
 
@@ -259,28 +272,37 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
   ];
 
   return (
-    <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 40px', borderBottom: `1px solid ${GM.ink}22`, background: GM.cream, position: 'sticky', top: 0, zIndex: 10 }}>
-      <div onClick={() => onNav('forside')} style={{ cursor: 'pointer', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.28em', color: GM.ink }}>
-        GOD&nbsp;MATSMAK &nbsp;·&nbsp; EST.&nbsp;2026 &nbsp;·&nbsp; HAFJELL
+    <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: mobil ? '12px 16px' : '18px 40px', borderBottom: `1px solid ${GM.ink}22`, background: GM.cream, position: 'sticky', top: 0, zIndex: 10 }}>
+      <div onClick={() => onNav('forside')} style={{ cursor: 'pointer', fontFamily: '"JetBrains Mono", monospace', fontSize: mobil ? 9 : 11, letterSpacing: mobil ? '0.18em' : '0.28em', color: GM.ink, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {mobil ? 'GOD MATSMAK' : <>GOD&nbsp;MATSMAK &nbsp;·&nbsp; EST.&nbsp;2026 &nbsp;·&nbsp; HAFJELL</>}
       </div>
-      <div style={{ display: 'flex', gap: 28 }}>
-        {lenker.map(l => (
-          <button key={l.id} onClick={() => onNav(l.id)} style={{
-            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-            fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, color: GM.ink,
-            fontWeight: aktiv === l.id ? 600 : 400,
-            borderBottom: aktiv === l.id ? `2px solid ${GM.rust}` : '2px solid transparent',
-            paddingBottom: 3,
-          }}>{l.n}</button>
-        ))}
-      </div>
-      <div ref={wrapRef} style={{ display: 'flex', gap: 14, alignItems: 'center', position: 'relative' }}>
-        <button onClick={() => setSokOpen(o => !o)} style={{
+      {!mobil && (
+        <div style={{ display: 'flex', gap: 28 }}>
+          {lenker.map(l => (
+            <button key={l.id} onClick={() => onNav(l.id)} style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, color: GM.ink,
+              fontWeight: aktiv === l.id ? 600 : 400,
+              borderBottom: aktiv === l.id ? `2px solid ${GM.rust}` : '2px solid transparent',
+              paddingBottom: 3,
+            }}>{l.n}</button>
+          ))}
+        </div>
+      )}
+      <div ref={wrapRef} style={{ display: 'flex', gap: 8, alignItems: 'center', position: 'relative' }}>
+        {mobil && (
+          <button onClick={() => onNav(aktiv === 'forside' ? 'oppskrifter' : 'forside')} style={{
+            background: 'none', color: GM.ink, border: `1px solid ${GM.ink}`, cursor: 'pointer',
+            padding: '6px 12px', borderRadius: 999,
+            fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
+          }}>{aktiv === 'forside' ? 'Oppskrifter' : 'Forside'}</button>
+        )}
+        <button onClick={() => setSokOpen(o => !o)} aria-label="Søk oppskrift" style={{
           background: sokOpen ? GM.ink : 'none', color: sokOpen ? GM.cream : GM.ink,
           border: `1px solid ${GM.ink}`, cursor: 'pointer',
-          padding: '6px 14px', borderRadius: 999,
+          padding: mobil ? '6px 12px' : '6px 14px', borderRadius: 999,
           fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
-        }}>Søk oppskrift</button>
+        }}>{mobil ? 'Søk' : 'Søk oppskrift'}</button>
         {sokOpen && (
           <GMSok
             recipes={recipes}
@@ -294,15 +316,16 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
 }
 
 function GMFooter({ onNav }) {
+  const mobil = useIsMobile();
   const lenker = [
     { id: 'forside', n: 'Forside' },
     { id: 'oppskrifter', n: 'Oppskrifter' },
   ];
   return (
-    <footer style={{ background: GM.ink, color: GM.cream, padding: '60px 40px 40px', marginTop: 80 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: 40 }}>
+    <footer style={{ background: GM.ink, color: GM.cream, padding: mobil ? '40px 16px 28px' : '60px 40px 40px', marginTop: mobil ? 50 : 80 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mobil ? '1fr' : '3fr 1fr', gap: mobil ? 28 : 40 }}>
         <div>
-          <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 36, fontStyle: 'italic', lineHeight: 1 }}>God Matsmak.</div>
+          <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 28 : 36, fontStyle: 'italic', lineHeight: 1 }}>God Matsmak.</div>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.2em', marginTop: 10, color: GM.cream, opacity: 0.7 }}>SMAK SOM SMAKER. INGENTING ANNET.</div>
         </div>
         <div>
@@ -316,7 +339,7 @@ function GMFooter({ onNav }) {
           ))}
         </div>
       </div>
-      <div style={{ marginTop: 60, paddingTop: 20, borderTop: `1px solid ${GM.cream}22`, display: 'flex', justifyContent: 'space-between', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em', opacity: 0.6 }}>
+      <div style={{ marginTop: mobil ? 36 : 60, paddingTop: 20, borderTop: `1px solid ${GM.cream}22`, display: 'flex', flexDirection: mobil ? 'column' : 'row', gap: mobil ? 8 : 0, justifyContent: 'space-between', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em', opacity: 0.6 }}>
         <span>© 2026 GOD MATSMAK — ALLE RETTER RESERVERT</span>
         <span>«MAT SOM SMAKER. FOOD WHICH TASTES.»</span>
       </div>
@@ -326,21 +349,30 @@ function GMFooter({ onNav }) {
 
 // ---------- recipe cards ----------
 function GMKortMinimal({ r, onClick }) {
+  const mobil = useIsMobile();
+  const bSize = mobil ? 88 : 140;
   return (
-    <article onClick={onClick} style={{ cursor: 'pointer', display: 'grid', gridTemplateColumns: '140px 1fr auto', gap: 24, alignItems: 'center', padding: '24px 0', borderBottom: `1px solid ${GM.ink}20` }}>
-      <div style={{ width: 140, height: 140, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15`, overflow: 'hidden' }}>
-        <RecipeBilde r={r} size={r.bilde ? 140 : 110} />
+    <article onClick={onClick} style={{ cursor: 'pointer', display: 'grid', gridTemplateColumns: mobil ? `${bSize}px 1fr` : '140px 1fr auto', gap: mobil ? 16 : 24, alignItems: 'center', padding: mobil ? '18px 0' : '24px 0', borderBottom: `1px solid ${GM.ink}20` }}>
+      <div style={{ width: bSize, height: bSize, background: GM.paper, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${GM.ink}15`, overflow: 'hidden' }}>
+        <RecipeBilde r={r} size={r.bilde ? bSize : Math.round(bSize * 0.78)} />
       </div>
-      <div>
+      <div style={{ minWidth: 0 }}>
         <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>{r.nr} &nbsp;·&nbsp; {r.kategori.toUpperCase()}</div>
-        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 28, lineHeight: 1, margin: '6px 0 8px', color: GM.ink }}>{r.navn}</h3>
+        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: mobil ? 22 : 28, lineHeight: 1.05, margin: '6px 0 8px', color: GM.ink }}>{r.navn}</h3>
         <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, color: GM.ink, opacity: 0.7, margin: 0 }}>{r.undertittel}</p>
+        {mobil && (
+          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.18em', color: GM.ink, opacity: 0.6, marginTop: 8 }}>
+            {r.tid.toUpperCase()} · {r.smaker} SMAKER <span style={{ color: GM.rust, opacity: 1 }}>· LES →</span>
+          </div>
+        )}
       </div>
-      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.18em', color: GM.ink, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-        <span>{r.tid.toUpperCase()}</span>
-        <span style={{ opacity: 0.5 }}>{r.smaker} SMAKER</span>
-        <span style={{ marginTop: 10, color: GM.rust }}>LES →</span>
-      </div>
+      {!mobil && (
+        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.18em', color: GM.ink, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+          <span>{r.tid.toUpperCase()}</span>
+          <span style={{ opacity: 0.5 }}>{r.smaker} SMAKER</span>
+          <span style={{ marginTop: 10, color: GM.rust }}>LES →</span>
+        </div>
+      )}
     </article>
   );
 }
@@ -417,39 +449,45 @@ function GMKjenningsmelodi() {
 
 function GMHero({ antall, hovedIll }) {
   const Hoved = hovedIll || IllTallerken;
+  const mobil = useIsMobile();
   return (
-    <section style={{ padding: '60px 40px 40px', position: 'relative' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 40, alignItems: 'center' }}>
+    <section style={{ padding: mobil ? '32px 16px 24px' : '60px 40px 40px', position: 'relative' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: mobil ? '1fr' : '1fr auto 1fr',
+        gap: mobil ? 32 : 40,
+        alignItems: 'center',
+      }}>
         <div>
           <GMLabel>Oppskrifter som smaker</GMLabel>
-          <div style={{ height: 30 }} />
-          <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(64px, 9vw, 128px)', lineHeight: 0.88, margin: 0, color: GM.ink, letterSpacing: '-0.03em' }}>
+          <div style={{ height: mobil ? 18 : 30 }} />
+          <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(56px, 14vw, 128px)', lineHeight: 0.88, margin: 0, color: GM.ink, letterSpacing: '-0.03em' }}>
             God<br/>
             <span style={{ fontStyle: 'italic', color: GM.rust }}>Matsmak.</span>
           </h1>
-          <div style={{ height: 26 }} />
-          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 440, margin: 0 }}>
+          <div style={{ height: mobil ? 18 : 26 }} />
+          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 440, margin: 0 }}>
             Her finnes ingen dårlige smaker. Bare god mat.
             Som smaker mat. Mat som smaker. Du skjønner tegninga.
           </p>
           <GMKjenningsmelodi />
         </div>
-        <div style={{ width: 1, alignSelf: 'stretch', background: GM.ink, opacity: 0.2 }} />
-        <div style={{ position: 'relative' }}>
-          <div style={{ position: 'absolute', top: -20, right: -10, transform: 'rotate(12deg)' }}>
-            <IllStempel tall="✓" tekst="GOD SMAK" size={120} />
+        {!mobil && <div style={{ width: 1, alignSelf: 'stretch', background: GM.ink, opacity: 0.2 }} />}
+        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: mobil ? -10 : -20, right: mobil ? 0 : -10, transform: 'rotate(12deg)', zIndex: 1 }}>
+            <IllStempel tall="✓" tekst="GOD SMAK" size={mobil ? 84 : 120} />
           </div>
-          <Hoved size={340} />
+          <Hoved size={mobil ? 240 : 340} />
         </div>
       </div>
-      <GMRule mt={50} thick={2} />
+      <GMRule mt={mobil ? 30 : 50} thick={2} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0 }}>
         {[
           { k: 'Dårlige smaker', v: '0' },
           { k: 'Gode smaker', v: String(antall) },
         ].map((s, i) => (
-          <div key={s.k} style={{ padding: '20px 24px', borderRight: i < 1 ? `1px solid ${GM.ink}22` : 'none' }}>
-            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 36, color: GM.ink, lineHeight: 1 }}>{s.v}</div>
+          <div key={s.k} style={{ padding: mobil ? '16px 14px' : '20px 24px', borderRight: i < 1 ? `1px solid ${GM.ink}22` : 'none' }}>
+            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: mobil ? 28 : 36, color: GM.ink, lineHeight: 1 }}>{s.v}</div>
             <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.6, marginTop: 8 }}>{s.k.toUpperCase()}</div>
           </div>
         ))}
@@ -460,13 +498,14 @@ function GMHero({ antall, hovedIll }) {
 }
 
 function GMSeksjonTittel({ nr, tittel, undertittel }) {
+  const mobil = useIsMobile();
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 40, padding: '60px 40px 30px', alignItems: 'end' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: mobil ? '1fr' : '1fr 2fr', gap: mobil ? 16 : 40, padding: mobil ? '40px 16px 20px' : '60px 40px 30px', alignItems: 'end' }}>
       <div>
         <GMLabel nr={nr}>Oppskrifter</GMLabel>
       </div>
       <div>
-        <h2 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(40px, 5vw, 72px)', lineHeight: 1, margin: 0, color: GM.ink, letterSpacing: '-0.02em' }}>{tittel}</h2>
+        <h2 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(36px, 7vw, 72px)', lineHeight: 1, margin: 0, color: GM.ink, letterSpacing: '-0.02em' }}>{tittel}</h2>
         {undertittel && (
           <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.7, marginTop: 14, maxWidth: 560 }}>{undertittel}</p>
         )}
@@ -476,8 +515,9 @@ function GMSeksjonTittel({ nr, tittel, undertittel }) {
 }
 
 function GMSitat() {
+  const mobil = useIsMobile();
   return (
-    <section style={{ background: GM.ink, color: GM.cream, padding: '100px 40px', textAlign: 'center', margin: '60px 0', position: 'relative' }}>
+    <section style={{ background: GM.ink, color: GM.cream, padding: mobil ? '60px 20px' : '100px 40px', textAlign: 'center', margin: mobil ? '40px 0' : '60px 0', position: 'relative' }}>
       <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', opacity: 0.5, marginBottom: 30 }}>KJØKKENFILOSOFI №01</div>
       <blockquote style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(28px, 4vw, 52px)', lineHeight: 1.15, maxWidth: 1000, margin: '0 auto', fontStyle: 'italic', letterSpacing: '-0.01em' }}>
         <span style={{ color: GM.rust, fontSize: '1.2em' }}>«</span>
@@ -492,6 +532,7 @@ function GMSitat() {
 function GMForside({ recipes, onOpen, onSeAlle }) {
   const utvalgt = recipes[0];
   const UtvalgtIll = velgIllustrasjon(utvalgt);
+  const mobil = useIsMobile();
   return (
     <>
       <GMHero antall={recipes.length} hovedIll={UtvalgtIll} />
@@ -500,27 +541,27 @@ function GMForside({ recipes, onOpen, onSeAlle }) {
         tittel={<>Smaker som <span style={{ fontStyle: 'italic', color: GM.rust }}>faktisk</span> smaker.</>}
         undertittel="Ingen snarveier. Ingen ironi på bekostning av osten. Bare oppskrifter som kommer ut av kjøkkenet og smaker som de lover."
       />
-      <section style={{ padding: '0 40px', display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 60, alignItems: 'center' }}>
+      <section style={{ padding: mobil ? '0 16px' : '0 40px', display: 'grid', gridTemplateColumns: mobil ? '1fr' : '3fr 2fr', gap: mobil ? 24 : 60, alignItems: 'center' }}>
         <div onClick={() => onOpen(utvalgt.id)} style={{
-          cursor: 'pointer', background: GM.paper, padding: utvalgt.bilde ? 0 : 60,
+          cursor: 'pointer', background: GM.paper, padding: utvalgt.bilde ? 0 : (mobil ? 30 : 60),
           aspectRatio: '5/4', display: 'flex', alignItems: 'center', justifyContent: 'center',
           border: `1px solid ${GM.ink}15`, overflow: 'hidden',
         }}>
           {utvalgt.bilde
-            ? <img src={utvalgt.bilde} alt={utvalgt.navn} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            : <UtvalgtIll size={400} />}
+            ? <img src={utvalgt.bilde} alt={utvalgt.navn} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            : <UtvalgtIll size={mobil ? 240 : 400} />}
         </div>
         <div>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>UKENS SMAK · {utvalgt.tid.toUpperCase()}</div>
-          <h3 onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(40px, 5vw, 68px)', lineHeight: 0.95, margin: '14px 0 18px', color: GM.ink, letterSpacing: '-0.02em' }}>{utvalgt.navn}</h3>
-          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 460 }}>{utvalgt.ingress}</p>
+          <h3 onClick={() => onOpen(utvalgt.id)} style={{ cursor: 'pointer', fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(34px, 7vw, 68px)', lineHeight: 0.95, margin: '14px 0 18px', color: GM.ink, letterSpacing: '-0.02em' }}>{utvalgt.navn}</h3>
+          <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 460 }}>{utvalgt.ingress}</p>
           <button onClick={() => onOpen(utvalgt.id)} style={{ marginTop: 28, padding: '12px 22px', cursor: 'pointer', background: GM.ink, color: GM.cream, border: 'none', fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em' }}>LES OPPSKRIFTEN →</button>
         </div>
       </section>
       <GMSitat />
-      <section style={{ padding: '80px 40px', textAlign: 'center', borderTop: `1px solid ${GM.ink}22`, borderBottom: `1px solid ${GM.ink}22` }}>
+      <section style={{ padding: mobil ? '50px 16px' : '80px 40px', textAlign: 'center', borderTop: `1px solid ${GM.ink}22`, borderBottom: `1px solid ${GM.ink}22` }}>
         <GMLabel>Alle oppskriftene</GMLabel>
-        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1, margin: '20px auto 16px', color: GM.ink, maxWidth: 900, letterSpacing: '-0.02em' }}>
+        <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(32px, 7vw, 64px)', lineHeight: 1, margin: '20px auto 16px', color: GM.ink, maxWidth: 900, letterSpacing: '-0.02em' }}>
           {recipes.length} oppskrifter. <span style={{ fontStyle: 'italic', color: GM.rust }}>Null</span> dårlige.
         </h3>
         <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.7, maxWidth: 520, margin: '0 auto 30px' }}>
@@ -534,25 +575,26 @@ function GMForside({ recipes, onOpen, onSeAlle }) {
 
 // ---------- oppskriftsliste ----------
 function GMOppskriftListe({ recipes, onOpen }) {
+  const mobil = useIsMobile();
   return (
     <>
-      <section style={{ padding: '60px 40px 30px' }}>
+      <section style={{ padding: mobil ? '36px 16px 20px' : '60px 40px 30px' }}>
         <GMLabel nr="§ 01">Alle oppskrifter</GMLabel>
-        <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(56px, 8vw, 112px)', lineHeight: 0.9, margin: '24px 0 20px', color: GM.ink, letterSpacing: '-0.03em' }}>
+        <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(48px, 11vw, 112px)', lineHeight: 0.9, margin: '24px 0 20px', color: GM.ink, letterSpacing: '-0.03em' }}>
           Hele <span style={{ fontStyle: 'italic', color: GM.rust }}>samlingen</span>.
         </h1>
-        <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 560, margin: 0 }}>
+        <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 560, margin: 0 }}>
           {recipes.length} oppskrifter som er kvalitetssikret, smakt på,
           og godkjent av minst én bestemor.
         </p>
-        <GMRule mt={40} thick={2} />
+        <GMRule mt={mobil ? 28 : 40} thick={2} />
       </section>
-      <div style={{ padding: '0 40px' }}>
+      <div style={{ padding: mobil ? '0 16px' : '0 40px' }}>
         {recipes.map(r => (
           <GMKortMinimal key={r.id} r={r} onClick={() => onOpen(r.id)} />
         ))}
       </div>
-      <div style={{ height: 80 }} />
+      <div style={{ height: 60 }} />
     </>
   );
 }
@@ -580,6 +622,7 @@ function formaterMengde(m, faktor) {
 }
 
 function GMTimer() {
+  const mobil = useIsMobile();
   const [sek, setSek] = React.useState(0);
   const [kjor, setKjor] = React.useState(false);
   React.useEffect(() => {
@@ -590,16 +633,17 @@ function GMTimer() {
   const mm = String(Math.floor(sek / 60)).padStart(2, '0');
   const ss = String(sek % 60).padStart(2, '0');
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: GM.ink, color: GM.cream }}>
-      <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', opacity: 0.7 }}>TIDTAKER</span>
-      <span style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 28, fontStyle: 'italic', letterSpacing: '-0.02em' }}>{mm}:{ss}</span>
-      <button onClick={() => setKjor(!kjor)} style={{ background: GM.rust, color: GM.cream, border: 'none', cursor: 'pointer', padding: '6px 12px', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em' }}>{kjor ? 'PAUSE' : 'START'}</button>
-      <button onClick={() => { setSek(0); setKjor(false); }} style={{ background: 'transparent', color: GM.cream, border: `1px solid ${GM.cream}44`, cursor: 'pointer', padding: '6px 10px', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em' }}>NULL</button>
+    <div style={{ display: 'flex', alignItems: 'center', gap: mobil ? 8 : 12, padding: mobil ? '8px 12px' : '12px 16px', background: GM.ink, color: GM.cream }}>
+      {!mobil && <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', opacity: 0.7 }}>TIDTAKER</span>}
+      <span style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 22 : 28, fontStyle: 'italic', letterSpacing: '-0.02em' }}>{mm}:{ss}</span>
+      <button onClick={() => setKjor(!kjor)} style={{ background: GM.rust, color: GM.cream, border: 'none', cursor: 'pointer', padding: '6px 10px', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em' }}>{kjor ? 'PAUSE' : 'START'}</button>
+      <button onClick={() => { setSek(0); setKjor(false); }} style={{ background: 'transparent', color: GM.cream, border: `1px solid ${GM.cream}44`, cursor: 'pointer', padding: '6px 8px', fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.2em' }}>NULL</button>
     </div>
   );
 }
 
 function GMOppskrift({ recipes, id, onBack }) {
+  const mobil = useIsMobile();
   const r = recipes.find(x => x.id === id) || recipes[0];
   const Ill = velgIllustrasjon(r);
   const [porsjoner, setPorsjoner] = React.useState(r.porsjoner);
@@ -619,14 +663,14 @@ function GMOppskrift({ recipes, id, onBack }) {
 
   return (
     <article>
-      <section style={{ padding: '40px 40px 60px', position: 'relative' }}>
-        <button onClick={() => onBack()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.ink, marginBottom: 30 }}>← TILBAKE TIL OPPSKRIFTER</button>
+      <section style={{ padding: mobil ? '24px 16px 36px' : '40px 40px 60px', position: 'relative' }}>
+        <button onClick={() => onBack()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.ink, marginBottom: mobil ? 20 : 30 }}>← TILBAKE</button>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 60, alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobil ? '1fr' : '1.3fr 1fr', gap: mobil ? 28 : 60, alignItems: 'center' }}>
           <div>
             <GMLabel nr={r.nr}>{r.kategori}</GMLabel>
-            <div style={{ height: 26 }} />
-            <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(52px, 7vw, 104px)', lineHeight: 0.9, margin: 0, color: GM.ink, letterSpacing: '-0.03em' }}>
+            <div style={{ height: mobil ? 16 : 26 }} />
+            <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(44px, 11vw, 104px)', lineHeight: 0.9, margin: 0, color: GM.ink, letterSpacing: '-0.03em' }}>
               {r.navn.split(' ').map((w, i, arr) => (
                 <React.Fragment key={i}>
                   {i === arr.length - 1 ? (
@@ -636,12 +680,12 @@ function GMOppskrift({ recipes, id, onBack }) {
                 </React.Fragment>
               ))}
             </h1>
-            <div style={{ height: 20 }} />
-            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 22, color: GM.rust }}>{r.undertittel}.</div>
-            <div style={{ height: 30 }} />
-            <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 520, margin: 0 }}>{r.ingress}</p>
-            <GMRule mt={40} mb={20} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+            <div style={{ height: mobil ? 14 : 20 }} />
+            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: mobil ? 18 : 22, color: GM.rust }}>{r.undertittel}.</div>
+            <div style={{ height: mobil ? 20 : 30 }} />
+            <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 520, margin: 0 }}>{r.ingress}</p>
+            <GMRule mt={mobil ? 28 : 40} mb={mobil ? 16 : 20} />
+            <div style={{ display: 'grid', gridTemplateColumns: mobil ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: mobil ? 14 : 20 }}>
               {[
                 ['Tid', r.tid],
                 ['Porsjoner', r.porsjoner + ' stk'],
@@ -650,44 +694,44 @@ function GMOppskrift({ recipes, id, onBack }) {
               ].map(([k, v]) => (
                 <div key={k}>
                   <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.5, marginBottom: 6 }}>{k.toUpperCase()}</div>
-                  <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 18, color: GM.ink, fontStyle: 'italic' }}>{v}</div>
+                  <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 16 : 18, color: GM.ink, fontStyle: 'italic' }}>{v}</div>
                 </div>
               ))}
             </div>
           </div>
           <div style={{
-            background: GM.paper, padding: r.bilde ? 0 : 40,
+            background: GM.paper, padding: r.bilde ? 0 : (mobil ? 24 : 40),
             border: `1px solid ${GM.ink}15`, aspectRatio: '1',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             position: 'relative', overflow: 'hidden',
           }}>
             {r.bilde
-              ? <img src={r.bilde} alt={r.navn} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              : <Ill size={340} />}
-            <div style={{ position: 'absolute', bottom: -24, right: -24, transform: 'rotate(-8deg)', zIndex: 1 }}>
-              <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={110} />
+              ? <img src={r.bilde} alt={r.navn} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              : <Ill size={mobil ? 240 : 340} />}
+            <div style={{ position: 'absolute', bottom: mobil ? -16 : -24, right: mobil ? -16 : -24, transform: 'rotate(-8deg)', zIndex: 1 }}>
+              <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={mobil ? 80 : 110} />
             </div>
           </div>
         </div>
       </section>
 
-      <section style={{ padding: '60px 40px', background: GM.paper, borderTop: `2px solid ${GM.ink}`, borderBottom: `2px solid ${GM.ink}` }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 60 }}>
+      <section style={{ padding: mobil ? '40px 16px' : '60px 40px', background: GM.paper, borderTop: `2px solid ${GM.ink}`, borderBottom: `2px solid ${GM.ink}` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobil ? '1fr' : '1fr 1.6fr', gap: mobil ? 40 : 60 }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
               <GMLabel nr="§ A">Ingredienser</GMLabel>
               <GMPorsjonJuster porsjoner={porsjoner} setPorsjoner={setPorsjoner} />
             </div>
             {r.ingredienser.map((grp, gi) => (
               <div key={gi} style={{ marginBottom: 30 }}>
-                <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 24, color: GM.ink, fontStyle: 'italic', marginBottom: 14, paddingBottom: 8, borderBottom: `1px solid ${GM.ink}33` }}>{grp.gruppe}</div>
+                <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 20 : 24, color: GM.ink, fontStyle: 'italic', marginBottom: 14, paddingBottom: 8, borderBottom: `1px solid ${GM.ink}33` }}>{grp.gruppe}</div>
                 {grp.rader.map((rd, ri) => {
                   const k = `${gi}-${ri}`;
                   const on = !!krysset[k];
                   return (
-                    <label key={ri} style={{ display: 'flex', alignItems: 'baseline', gap: 14, padding: '8px 0', cursor: 'pointer', borderBottom: `1px dotted ${GM.ink}22`, opacity: on ? 0.4 : 1 }}>
-                      <input type="checkbox" checked={on} onChange={() => toggle(k)} style={{ accentColor: GM.rust, width: 16, height: 16, flexShrink: 0 }} />
-                      <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 13, color: GM.rust, minWidth: 72, textDecoration: on ? 'line-through' : 'none' }}>{formaterMengde(rd.m, faktor)} {rd.e}</span>
+                    <label key={ri} style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '8px 0', cursor: 'pointer', borderBottom: `1px dotted ${GM.ink}22`, opacity: on ? 0.4 : 1 }}>
+                      <input type="checkbox" checked={on} onChange={() => toggle(k)} style={{ accentColor: GM.rust, width: 18, height: 18, flexShrink: 0 }} />
+                      <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 13, color: GM.rust, minWidth: 64, textDecoration: on ? 'line-through' : 'none' }}>{formaterMengde(rd.m, faktor)} {rd.e}</span>
                       <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 15, color: GM.ink, flex: 1, textDecoration: on ? 'line-through' : 'none' }}>{rd.n}</span>
                     </label>
                   );
@@ -697,7 +741,7 @@ function GMOppskrift({ recipes, id, onBack }) {
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
               <GMLabel nr="§ B">Slik gjør du</GMLabel>
               <GMTimer />
             </div>
@@ -705,11 +749,11 @@ function GMOppskrift({ recipes, id, onBack }) {
               {r.steg.map((s, i) => {
                 const on = !!steg[i];
                 return (
-                  <li key={i} onClick={() => toggleSteg(i)} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 24, padding: '24px 0', cursor: 'pointer', borderBottom: `1px solid ${GM.ink}22`, opacity: on ? 0.35 : 1 }}>
-                    <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 72, lineHeight: 0.9, color: on ? GM.ink : GM.rust, fontStyle: 'italic', textDecoration: on ? 'line-through' : 'none' }}>{String(i + 1).padStart(2, '0')}</div>
+                  <li key={i} onClick={() => toggleSteg(i)} style={{ display: 'grid', gridTemplateColumns: mobil ? '52px 1fr' : '90px 1fr', gap: mobil ? 14 : 24, padding: mobil ? '18px 0' : '24px 0', cursor: 'pointer', borderBottom: `1px solid ${GM.ink}22`, opacity: on ? 0.35 : 1 }}>
+                    <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 44 : 72, lineHeight: 0.9, color: on ? GM.ink : GM.rust, fontStyle: 'italic', textDecoration: on ? 'line-through' : 'none' }}>{String(i + 1).padStart(2, '0')}</div>
                     <div>
-                      <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 26, color: GM.ink, marginBottom: 8, letterSpacing: '-0.01em' }}>{s.t}</div>
-                      <div style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 16, color: GM.ink, opacity: 0.8, lineHeight: 1.55 }}>{s.d}</div>
+                      <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 20 : 26, color: GM.ink, marginBottom: 8, letterSpacing: '-0.01em' }}>{s.t}</div>
+                      <div style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 15 : 16, color: GM.ink, opacity: 0.8, lineHeight: 1.55 }}>{s.d}</div>
                     </div>
                   </li>
                 );
@@ -719,24 +763,24 @@ function GMOppskrift({ recipes, id, onBack }) {
         </div>
       </section>
 
-      <section style={{ padding: '80px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60 }}>
+      <section style={{ padding: mobil ? '50px 16px' : '80px 40px', display: 'grid', gridTemplateColumns: mobil ? '1fr' : '1fr 1fr', gap: mobil ? 36 : 60 }}>
         <div>
           <GMLabel nr="§ C">Servér slik</GMLabel>
-          <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.servering}</p>
+          <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 22 : 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.servering}</p>
         </div>
         <div>
           <GMLabel nr="§ D">Drikk til</GMLabel>
-          <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.par}</p>
+          <p style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 22 : 30, lineHeight: 1.3, color: GM.ink, marginTop: 16, fontStyle: 'italic', letterSpacing: '-0.01em' }}>{r.par}</p>
         </div>
       </section>
 
-      <section style={{ padding: '60px 40px', background: GM.ink, color: GM.cream }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <section style={{ padding: mobil ? '36px 16px' : '60px 40px', background: GM.ink, color: GM.cream }}>
+        <div style={{ display: 'flex', flexDirection: mobil ? 'column' : 'row', justifyContent: 'space-between', alignItems: mobil ? 'flex-start' : 'center', gap: mobil ? 20 : 0 }}>
           <div>
             <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', opacity: 0.6 }}>NESTE OPPSKRIFT</div>
-            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: 44, marginTop: 12, fontStyle: 'italic' }}>{neste.navn}</div>
+            <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 30 : 44, marginTop: 12, fontStyle: 'italic' }}>{neste.navn}</div>
           </div>
-          <button onClick={() => onBack(neste.id)} style={{ background: GM.rust, color: GM.cream, border: 'none', cursor: 'pointer', padding: '18px 32px', fontFamily: '"JetBrains Mono", monospace', fontSize: 12, letterSpacing: '0.22em' }}>LES DEN →</button>
+          <button onClick={() => onBack(neste.id)} style={{ background: GM.rust, color: GM.cream, border: 'none', cursor: 'pointer', padding: mobil ? '14px 22px' : '18px 32px', fontFamily: '"JetBrains Mono", monospace', fontSize: 12, letterSpacing: '0.22em' }}>LES DEN →</button>
         </div>
       </section>
     </article>
