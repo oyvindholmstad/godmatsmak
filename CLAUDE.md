@@ -34,3 +34,21 @@ Flavor dimensions to consider (non-exhaustive):
 3. Set `illustrasjon` to `"tallerken"` or `"bolle"` (CSS illustrations).
 4. Optional: add `"bilde": "recipes/images/<file>"` for a real photo.
 5. Set `smaker` per the rules above — think hard about ingredients and method.
+
+## Build
+
+The app is a single-page React app. The source-of-truth is `app.jsx`; the served file is `app.js` (minified) produced by esbuild.
+
+- `npm install` once to get esbuild.
+- `npm run build` after editing `app.jsx` — emits `app.js`.
+- `npm run watch` rebuilds on every change.
+
+`index.html` references `app.js` directly and never needs to be regenerated. Don't put JSX inline in `index.html`.
+
+## Recipe images
+
+When adding a `bilde`, ship both a JPG (fallback) and a WebP (preferred) at the same path:
+- `recipes/images/<id>.jpg`
+- `recipes/images/<id>.webp`
+
+The JSON only references the `.jpg`; the markup derives the `.webp` path automatically. Resize so the longest edge is ≤ 1600 px and re-encode at quality ~80.
