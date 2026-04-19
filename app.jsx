@@ -1,3 +1,14 @@
+// ---------- seo ----------
+const GM_BASE_URL = 'https://oyvindholmstad.github.io/godmatsmak';
+
+function tidTilISO(tid) {
+  const t = tid.toLowerCase();
+  const h = t.match(/(\d+)\s*t/)?.[1];
+  const m = t.match(/(\d+)\s*min/)?.[1];
+  if (!h && !m) return undefined;
+  return `PT${h ? h + 'H' : ''}${m ? m + 'M' : ''}`;
+}
+
 // ---------- data ----------
 async function lastOppskrifter() {
   const manifest = await fetch('recipes/index.json').then(r => r.json());
@@ -733,6 +744,44 @@ function GMOppskrift({ recipes, id, onBack }) {
     setSteg({});
   }, [id]);
 
+  React.useEffect(() => {
+    document.title = `${r.navn} — God Matsmak`;
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Recipe',
+      name: r.navn,
+      description: r.ingress,
+      recipeCategory: r.kategori,
+      recipeYield: `${r.porsjoner} porsjoner`,
+      recipeIngredient: r.ingredienser.flatMap(g => g.rader.map(rd => `${rd.m} ${rd.e} ${rd.n}`)),
+      recipeInstructions: r.steg.map((s, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: s.t,
+        text: s.d,
+      })),
+      author: { '@type': 'Organization', name: 'God Matsmak' },
+    };
+    if (r.bilde) jsonLd.image = `${GM_BASE_URL}/${r.bilde}`;
+    const iso = tidTilISO(r.tid);
+    if (iso) jsonLd.totalTime = iso;
+
+    let el = document.getElementById('recipe-jsonld');
+    if (!el) {
+      el = document.createElement('script');
+      el.id = 'recipe-jsonld';
+      el.type = 'application/ld+json';
+      document.head.appendChild(el);
+    }
+    el.text = JSON.stringify(jsonLd);
+
+    return () => {
+      document.getElementById('recipe-jsonld')?.remove();
+      document.title = 'God Matsmak — Mat som smaker';
+    };
+  }, [r.id]);
+
   const toggle = (k) => setKrysset(p => ({ ...p, [k]: !p[k] }));
   const toggleSteg = (k) => setSteg(p => ({ ...p, [k]: !p[k] }));
   const neste = recipes.find(x => x.id !== r.id) || r;
@@ -907,6 +956,11 @@ function App() {
 
   React.useEffect(() => { localStorage.setItem('gm_side', side); }, [side]);
   React.useEffect(() => { localStorage.setItem('gm_oppskrift', oppskriftId); }, [oppskriftId]);
+
+  React.useEffect(() => {
+    if (side === 'forside') document.title = 'God Matsmak — Mat som smaker';
+    else if (side === 'oppskrifter') document.title = 'Alle oppskrifter — God Matsmak';
+  }, [side]);
 
   const openOppskrift = (id) => {
     setOppskriftId(id);
