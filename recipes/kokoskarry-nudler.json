@@ -1,5 +1,5 @@
 {
-  "id": "kokoskarrysuppe",
+  "id": "kokoskarry-nudler",
   "nr": "№ 04",
   "navn": "Kokoskarry-suppe med nudler",
   "undertittel": "Femten minutter til middag som smaker som restaurant",
@@ -11,7 +11,7 @@
   "smak": "Kremet, syrlig, sterk, umami",
   "ingress": "En kokosbasert nudelsuppe med thai-rød karry som lever av kontraster: kremet kokos, syrlig lime, salt fiskesaus og varme fra karrypastaen. Hele greia er ferdig på et kvarter — perfekt når du vil ha noe som smaker mye uten å gjøre mye.",
   "illustrasjon": "bolle",
-  "bilde": "recipes/images/kokoskarrysuppe.jpg",
+  "bilde": "recipes/images/kokoskarry-nudler.jpg",
   "ingredienser": [
     {
       "gruppe": "Suppen",

@@ -1000,7 +1000,7 @@ function navigerTil(state, { replace } = {}) {
 function App() {
   const init = parseHash(typeof window !== 'undefined' ? window.location.hash : '');
   const [side, setSide] = React.useState(init.side);
-  const [oppskriftId, setOppskriftId] = React.useState(init.id || 'kjottkaker');
+  const [oppskriftId, setOppskriftId] = React.useState(init.id || 'kjottkaker-brun-saus');
   const [recipes, setRecipes] = React.useState(null);
   const [filosofi, setFilosofi] = React.useState(null);
   const [sitatNr, setSitatNr] = React.useState(1);

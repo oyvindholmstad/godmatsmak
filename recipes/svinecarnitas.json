@@ -1,5 +1,5 @@
 {
-  "id": "porkcarnitas",
+  "id": "svinecarnitas",
   "nr": "№ 05",
   "navn": "Svinecarnitas",
   "undertittel": "Langtidskokt svin som blir sprø på toppen og mør inni",
@@ -11,7 +11,7 @@
   "smak": "Søt, syrlig, krydret, sprø",
   "ingress": "Cola og ananasjuice høres rart ut helt til du smaker det. Kjøttet trekker seg mørt i ovnen i tre timer, sausen reduseres til sirup, og så sprøstekes kjøttet under grillen. Taco-kveld blir aldri den samme.",
   "illustrasjon": "tallerken",
-  "bilde": "recipes/images/porkcarnitas.jpg",
+  "bilde": "recipes/images/svinecarnitas.jpg",
   "ingredienser": [
     {
       "gruppe": "Kjøttet",

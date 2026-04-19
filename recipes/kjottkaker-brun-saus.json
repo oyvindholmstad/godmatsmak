@@ -1,5 +1,5 @@
 {
-  "id": "kjottkaker",
+  "id": "kjottkaker-brun-saus",
   "nr": "№ 01",
   "navn": "Kjøttkaker i brun saus",
   "undertittel": "Den som smaker som mormor, bare litt frekkere",
@@ -11,7 +11,7 @@
   "smak": "Salt, umami, litt søt",
   "ingress": "Det finnes kjøttkaker, og så finnes det KJØTTKAKER. Disse er den siste sorten. Sausen er brun som en norsk novembermorgen og dobbelt så koselig.",
   "illustrasjon": "tallerken",
-  "bilde": "recipes/images/kjottkaker.jpg",
+  "bilde": "recipes/images/kjottkaker-brun-saus.jpg",
   "ingredienser": [
     {
       "gruppe": "Kjøttkakene",

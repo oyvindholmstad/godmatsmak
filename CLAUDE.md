@@ -17,7 +17,7 @@ When writing recipe copy (`undertittel`, `ingress`, step `t`/`d`, `servering`, `
 - **Short over long** — undertittel is one line. Ingress is 2–4 sentences. Step descriptions earn their length.
 - **Never break the fourth wall about being a recipe site** — no "in this recipe we will…", no "scroll down to see…".
 
-When in doubt, read `recipes/grillspyd.json` and `recipes/kjottkaker.json` — those set the tone.
+When in doubt, read `recipes/grillspyd-cracksaus.json` and `recipes/kjottkaker-brun-saus.json` — those set the tone.
 
 ## "Antall smaker" (smaker field on recipes)
 

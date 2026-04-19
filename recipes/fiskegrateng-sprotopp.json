@@ -1,5 +1,5 @@
 {
-  "id": "fiskegrateng",
+  "id": "fiskegrateng-sprotopp",
   "nr": "№ 02",
   "navn": "Fiskegrateng med sprø topp",
   "undertittel": "Kantina på skolen tok feil — dette er noe helt annet",
@@ -11,7 +11,7 @@
   "smak": "Kremet, salt, smør-gyllent",
   "ingress": "Fiskegrateng har ufortjent dårlig rykte fordi noen bestemte seg for å servere den grå. Denne er gyllen, kremet i midten og har en topp som knaser som en frossen pytt i januar.",
   "illustrasjon": "bolle",
-  "bilde": "recipes/images/fiskegrateng.jpg",
+  "bilde": "recipes/images/fiskegrateng-sprotopp.jpg",
   "ingredienser": [
     {
       "gruppe": "Fisk og form",
