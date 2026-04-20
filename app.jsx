@@ -256,6 +256,7 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
             fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
           }}>{aktiv === 'forside' ? 'Oppskrifter' : 'Forside'}</button>
         )}
+        <GMKjenningsmelodi />
         <button onClick={() => setSokOpen(o => !o)} aria-label="Søk oppskrift" style={{
           background: sokOpen ? GM.ink : 'none', color: sokOpen ? GM.cream : GM.ink,
           border: `1px solid ${GM.ink}`, cursor: 'pointer',
@@ -354,59 +355,97 @@ function GMKortStempel({ r, onClick }) {
   );
 }
 
-// ---------- forside ----------
 function GMKjenningsmelodi() {
   const audioRef = React.useRef(null);
+  const wrapRef = React.useRef(null);
+  const mobil = useIsMobile();
   const [spiller, setSpiller] = React.useState(false);
+  const [apen, setApen] = React.useState(false);
 
   React.useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    const onEnd = () => setSpiller(false);
+    const onEnd = () => { setSpiller(false); setApen(false); };
     a.addEventListener('ended', onEnd);
     return () => a.removeEventListener('ended', onEnd);
   }, []);
 
+  React.useEffect(() => {
+    if (!apen) return;
+    const onClick = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setApen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [apen]);
+
   const toggle = () => {
     const a = audioRef.current;
     if (!a) return;
-    if (spiller) { a.pause(); setSpiller(false); }
-    else { a.play(); setSpiller(true); }
+    if (spiller) {
+      a.pause();
+      setSpiller(false);
+    } else {
+      a.play();
+      setSpiller(true);
+      if (!mobil) setApen(true);
+    }
   };
 
+  const knapp = (
+    <button onClick={toggle} aria-label={spiller ? 'Pause kjenningsmelodi' : 'Spill kjenningsmelodi'} style={{
+      width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer',
+      background: GM.rust, color: GM.cream, flexShrink: 0, padding: 0,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      {spiller ? (
+        <span style={{ display: 'inline-flex', gap: 2 }}>
+          <span style={{ width: 3, height: 11, background: GM.cream }} />
+          <span style={{ width: 3, height: 11, background: GM.cream }} />
+        </span>
+      ) : (
+        <span style={{
+          width: 0, height: 0,
+          borderLeft: `8px solid ${GM.cream}`,
+          borderTop: '6px solid transparent',
+          borderBottom: '6px solid transparent',
+        }} />
+      )}
+    </button>
+  );
+
+  const audio = <audio ref={audioRef} src="god-matsmak.mp3" preload="none" />;
+
+  if (mobil) {
+    return <div style={{ display: 'inline-flex' }}>{knapp}{audio}</div>;
+  }
+
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 28, border: `2px solid ${GM.ink}`, padding: '10px 16px 10px 10px', background: GM.paper }}>
-      <button onClick={toggle} aria-label={spiller ? 'Pause kjenningsmelodi' : 'Spill kjenningsmelodi'} style={{
-        width: 40, height: 40, borderRadius: '50%', border: 'none', cursor: 'pointer',
-        background: GM.rust, color: GM.cream,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 14, paddingLeft: spiller ? 0 : 3,
+    <div ref={wrapRef} style={{
+      display: 'inline-flex', alignItems: 'center', gap: apen ? 12 : 0,
+      border: `1px solid ${GM.ink}`, borderRadius: 999,
+      padding: apen ? '4px 14px 4px 4px' : 4,
+      background: GM.paper,
+      transition: 'gap 180ms ease, padding 180ms ease',
+    }}>
+      {knapp}
+      <div style={{
+        display: 'flex', flexDirection: 'column', lineHeight: 1.1,
+        maxWidth: apen ? 220 : 0, overflow: 'hidden',
+        transition: 'max-width 220ms ease',
+        whiteSpace: 'nowrap',
       }}>
-        {spiller ? (
-          <span style={{ display: 'inline-flex', gap: 3 }}>
-            <span style={{ width: 4, height: 14, background: GM.cream }} />
-            <span style={{ width: 4, height: 14, background: GM.cream }} />
-          </span>
-        ) : (
-          <span style={{
-            width: 0, height: 0,
-            borderLeft: `10px solid ${GM.cream}`,
-            borderTop: '7px solid transparent',
-            borderBottom: '7px solid transparent',
-          }} />
-        )}
-      </button>
-      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>KJENNINGSMELODI</span>
-        <span style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 18, color: GM.ink, marginTop: 4 }}>
+        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 9, letterSpacing: '0.22em', color: GM.rust }}>KJENNINGSMELODI</span>
+        <span style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: 14, color: GM.ink, marginTop: 2 }}>
           {spiller ? 'Spiller nå…' : 'Trykk for å smake'}
         </span>
       </div>
-      <audio ref={audioRef} src="god-matsmak.mp3" preload="none" />
+      {audio}
     </div>
   );
 }
 
+// ---------- forside ----------
 function GMHero({ antall }) {
   const mobil = useIsMobile();
   return (
@@ -429,7 +468,6 @@ function GMHero({ antall }) {
             Her finnes ingen dårlige smaker. Bare god mat.
             Som smaker mat. Mat som smaker. Du skjønner tegninga.
           </p>
-          <GMKjenningsmelodi />
         </div>
         {!mobil && <div style={{ width: 1, alignSelf: 'stretch', background: GM.ink, opacity: 0.2 }} />}
         <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
