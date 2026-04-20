@@ -75,10 +75,9 @@ Velg én verdi per felt. Hvis en rett har flere proteiner (f.eks. surf-and-turf)
 
 1. Create `recipes/<id>.json` with the standard schema (see existing files).
 2. Add `"<id>"` to `recipes/index.json`.
-3. Set `illustrasjon` to `"tallerken"` or `"bolle"` (CSS illustrations).
-4. Optional: add `"bilde": "recipes/images/<file>"` for a real photo.
-5. Set `smaker` per the rules above — think hard about ingredients and method.
-6. Set `kategori`, `når`, and `protein` per the taxonomy above.
+3. Add `"bilde": "recipes/images/<file>"` pointing at the JPG (see "Recipe images" below). If omitted, the site falls back to the God Matsmak logo.
+4. Set `smaker` per the rules above — think hard about ingredients and method.
+5. Set `kategori`, `når`, and `protein` per the taxonomy above.
 
 ## Build
 

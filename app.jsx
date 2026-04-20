@@ -29,11 +29,6 @@ function dagensIndeks(antall) {
   return ((dager % antall) + antall) % antall;
 }
 
-function velgIllustrasjon(r) {
-  if (r.illustrasjon === 'bolle') return IllBolle;
-  return IllTallerken;
-}
-
 function webpFra(p) {
   return p ? p.replace(/\.(jpe?g|png)$/i, '.webp') : p;
 }
@@ -71,8 +66,15 @@ function RecipeBilde({ r, size, runde }) {
       />
     );
   }
-  const Ill = velgIllustrasjon(r);
-  return <Ill size={size} />;
+  return (
+    <img
+      src="images/godmatsmak-logo.png"
+      alt={r.navn}
+      width={size}
+      height={size}
+      style={{ width: size, height: size, objectFit: 'contain', display: 'block', borderRadius: runde ? '50%' : 0 }}
+    />
+  );
 }
 
 // ---------- responsive ----------
@@ -98,59 +100,6 @@ const GM = {
 };
 
 // ---------- illustrations ----------
-function IllTallerken({ size = 260, label = 'kjøttkaker' }) {
-  const rust = '#8B2D1F';
-  const dark = '#3C2A1E';
-  const cream = '#EFE8DA';
-  const warm = '#D9B384';
-  return (
-    <div style={{ position: 'relative', width: size, height: size }} aria-label={label}>
-      <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: cream, border: `2px solid ${dark}` }} />
-      <div style={{ position: 'absolute', inset: '8%', borderRadius: '50%', border: `1px solid ${dark}`, opacity: 0.35 }} />
-      <div style={{ position: 'absolute', left: '22%', top: '30%', width: '28%', height: '28%', borderRadius: '50%', background: dark, boxShadow: `inset -6px -6px 0 ${rust}` }} />
-      <div style={{ position: 'absolute', left: '50%', top: '25%', width: '28%', height: '28%', borderRadius: '50%', background: dark, boxShadow: `inset -6px -6px 0 ${rust}` }} />
-      <div style={{ position: 'absolute', left: '35%', top: '50%', width: '28%', height: '28%', borderRadius: '50%', background: dark, boxShadow: `inset -6px -6px 0 ${rust}` }} />
-      <div style={{ position: 'absolute', left: '20%', top: '28%', width: '62%', height: '42%', borderRadius: '50%', background: `radial-gradient(ellipse at 40% 40%, ${warm} 0%, transparent 65%)`, mixBlendMode: 'multiply', opacity: 0.6 }} />
-    </div>
-  );
-}
-
-function IllBolle({ size = 260, label = 'fiskegrateng' }) {
-  const rust = '#8B2D1F';
-  const dark = '#3C2A1E';
-  const gyllen = '#D9A441';
-  const topp = '#E8C57A';
-  const topper = [
-    { l: '18%', t: '28%', s: 22 },
-    { l: '32%', t: '24%', s: 28 },
-    { l: '50%', t: '26%', s: 24 },
-    { l: '66%', t: '23%', s: 30 },
-    { l: '78%', t: '30%', s: 20 },
-    { l: '22%', t: '42%', s: 26 },
-    { l: '42%', t: '40%', s: 30 },
-    { l: '62%', t: '44%', s: 24 },
-    { l: '78%', t: '48%', s: 22 },
-    { l: '28%', t: '58%', s: 22 },
-    { l: '48%', t: '60%', s: 26 },
-    { l: '68%', t: '62%', s: 20 },
-  ];
-  return (
-    <div style={{ position: 'relative', width: size, height: size }} aria-label={label}>
-      <div style={{ position: 'absolute', left: '6%', right: '6%', top: '18%', bottom: '14%', borderRadius: '14px', background: dark }} />
-      <div style={{ position: 'absolute', left: '10%', right: '10%', top: '22%', bottom: '18%', borderRadius: '10px', background: gyllen }} />
-      <div style={{ position: 'absolute', left: '2%', top: '38%', width: '8%', height: '22%', background: dark, borderRadius: '4px 0 0 4px' }} />
-      <div style={{ position: 'absolute', right: '2%', top: '38%', width: '8%', height: '22%', background: dark, borderRadius: '0 4px 4px 0' }} />
-      {topper.map((k, i) => (
-        <div key={i} style={{ position: 'absolute', left: k.l, top: k.t, width: k.s, height: k.s, borderRadius: '50%', background: topp, boxShadow: `inset -3px -3px 0 ${rust}44` }} />
-      ))}
-      <div style={{ position: 'absolute', left: '38%', top: '34%', width: 14, height: 10, borderRadius: '50%', background: rust, opacity: 0.7 }} />
-      <div style={{ position: 'absolute', left: '58%', top: '54%', width: 12, height: 8, borderRadius: '50%', background: rust, opacity: 0.7 }} />
-      <div style={{ position: 'absolute', left: '30%', top: '6%', fontSize: 18, color: dark, opacity: 0.4, fontFamily: 'serif' }}>∼</div>
-      <div style={{ position: 'absolute', left: '52%', top: '3%', fontSize: 22, color: dark, opacity: 0.35, fontFamily: 'serif' }}>∼</div>
-    </div>
-  );
-}
-
 function IllStempel({ tall = '01', tekst = 'MATSMAK', size = 140 }) {
   const rust = '#8B2D1F';
   const dark = '#3C2A1E';
@@ -458,8 +407,7 @@ function GMKjenningsmelodi() {
   );
 }
 
-function GMHero({ antall, hovedIll }) {
-  const Hoved = hovedIll || IllTallerken;
+function GMHero({ antall }) {
   const mobil = useIsMobile();
   return (
     <section style={{ padding: mobil ? '32px 16px 24px' : '60px 40px 40px', position: 'relative' }}>
@@ -488,7 +436,7 @@ function GMHero({ antall, hovedIll }) {
           <div style={{ position: 'absolute', top: mobil ? -10 : -20, right: mobil ? 0 : -10, transform: 'rotate(12deg)', zIndex: 1 }}>
             <IllStempel tall="✓" tekst="GOD SMAK" size={mobil ? 84 : 120} />
           </div>
-          <Hoved size={mobil ? 240 : 340} />
+          <img src="images/godmatsmak-logo.png" alt="God Matsmak" width={mobil ? 240 : 340} height={mobil ? 240 : 340} style={{ display: 'block', width: mobil ? 240 : 340, height: 'auto' }} />
         </div>
       </div>
       <GMRule mt={mobil ? 30 : 50} thick={2} />
@@ -544,11 +492,10 @@ function GMSitat({ sitat, nr }) {
 
 function GMForside({ recipes, onOpen, onSeAlle, sitat, sitatNr }) {
   const utvalgt = recipes[dagensIndeks(recipes.length)];
-  const UtvalgtIll = velgIllustrasjon(utvalgt);
   const mobil = useIsMobile();
   return (
     <>
-      <GMHero antall={recipes.length} hovedIll={UtvalgtIll} />
+      <GMHero antall={recipes.length} />
       <GMSeksjonTittel
         nr="§ 01"
         tittel={<>Smaker som <span style={{ fontStyle: 'italic', color: GM.rust }}>faktisk</span> smaker.</>}
@@ -562,7 +509,7 @@ function GMForside({ recipes, onOpen, onSeAlle, sitat, sitatNr }) {
         }}>
           {utvalgt.bilde
             ? <GMBilde src={utvalgt.bilde} alt={utvalgt.navn} eager style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            : <UtvalgtIll size={mobil ? 240 : 400} />}
+            : <img src="images/godmatsmak-logo.png" alt={utvalgt.navn} style={{ width: mobil ? 240 : 400, height: 'auto', display: 'block' }} />}
         </div>
         <div>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.22em', color: GM.rust }}>DAGENS SMAK · {utvalgt.tid.toUpperCase()}</div>
@@ -768,7 +715,6 @@ function GMTimer() {
 function GMOppskrift({ recipes, id, onBack }) {
   const mobil = useIsMobile();
   const r = recipes.find(x => x.id === id) || recipes[0];
-  const Ill = velgIllustrasjon(r);
   const [porsjoner, setPorsjoner] = React.useState(r.porsjoner);
   const [krysset, setKrysset] = React.useState({});
   const [steg, setSteg] = React.useState({});
@@ -874,7 +820,7 @@ function GMOppskrift({ recipes, id, onBack }) {
           }}>
             {r.bilde
               ? <GMBilde src={r.bilde} alt={r.navn} eager style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              : <Ill size={mobil ? 240 : 340} />}
+              : <img src="images/godmatsmak-logo.png" alt={r.navn} style={{ width: mobil ? 240 : 340, height: 'auto', display: 'block' }} />}
             <div style={{ position: 'absolute', bottom: mobil ? -16 : -24, right: mobil ? -16 : -24, transform: 'rotate(-8deg)', zIndex: 1 }}>
               <IllStempel tall={r.nr.replace('№ ', '')} tekst="GOD SMAK" size={mobil ? 80 : 110} />
             </div>
