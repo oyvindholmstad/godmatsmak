@@ -46,6 +46,31 @@ Flavor dimensions to consider (non-exhaustive):
 
 **Display:** On the recipe detail page, "Smaker" replaces "Nivå" in the meta strip (Tid / Porsjoner / Smak / Smaker). Show the integer as-is.
 
+## Taksonomi — kategori, når, protein
+
+Tre klassifiserende felt på hver oppskrift. Alle verdier ender på `-smak` — det er en del av språket på siden, ikke en tilfeldighet.
+
+**`kategori`** — hva slags rett er dette:
+- `middagsmak` — hovedretter til middag
+- `suppesmak` — supper og gryter man spiser med skje
+- `dessertsmak` — søtt til slutt
+- `tilbehørsmak` — sider, salater, brød, sauser som står alene
+- `drikkesmak` — drikke, fra cocktails til varm sjokolade
+
+**`når`** — når på uka skal dette smakes:
+- `hverdagssmak` — rimelig rask, ikke krever spesialingredienser, funker en tirsdag
+- `helgesmak` — tar tid, krever planlegging, eller føles som en anledning
+
+**`protein`** — hva er hovedproteinet (eller fraværet av det):
+- `svinesmak` — gris
+- `storfesmak` — okse/kalv
+- `fiskesmak` — fisk og skalldyr
+- `fuglesmak` — kylling, kalkun, and
+- `viltsmak` — elg, rein, hjort, villfugl
+- `vegetarsmak` — ingen kjøtt/fisk, inkl. vegansk
+
+Velg én verdi per felt. Hvis en rett har flere proteiner (f.eks. surf-and-turf), velg det som definerer retten mest.
+
 ## Adding a new recipe
 
 1. Create `recipes/<id>.json` with the standard schema (see existing files).
@@ -53,6 +78,7 @@ Flavor dimensions to consider (non-exhaustive):
 3. Set `illustrasjon` to `"tallerken"` or `"bolle"` (CSS illustrations).
 4. Optional: add `"bilde": "recipes/images/<file>"` for a real photo.
 5. Set `smaker` per the rules above — think hard about ingredients and method.
+6. Set `kategori`, `når`, and `protein` per the taxonomy above.
 
 ## Build
 

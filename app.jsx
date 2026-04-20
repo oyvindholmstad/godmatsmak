@@ -197,7 +197,7 @@ function GMSok({ recipes, onOpen, onLukk }) {
     if (!s) return recipes;
     return recipes.filter(r => {
       const hay = [
-        r.navn, r.undertittel, r.kategori, r.smak, r.ingress,
+        r.navn, r.undertittel, r.kategori, r.når, r.protein, r.smak, r.ingress,
         ...r.ingredienser.flatMap(g => [g.gruppe, ...g.rader.map(x => x.n)]),
       ].join(' ').toLowerCase();
       return hay.includes(s);
@@ -367,18 +367,19 @@ function GMKortMinimal({ r, onClick }) {
         <RecipeBilde r={r} size={r.bilde ? bSize : Math.round(bSize * 0.78)} />
       </div>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>{r.nr} &nbsp;·&nbsp; {r.kategori.toUpperCase()}</div>
+        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust }}>{r.nr} &nbsp;·&nbsp; {r.kategori.toUpperCase()}{r.protein ? ` · ${r.protein.toUpperCase()}` : ''}</div>
         <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: mobil ? 22 : 28, lineHeight: 1.05, margin: '6px 0 8px', color: GM.ink }}>{r.navn}</h3>
         <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 14, color: GM.ink, opacity: 0.7, margin: 0 }}>{r.undertittel}</p>
         {mobil && (
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.18em', color: GM.ink, opacity: 0.6, marginTop: 8 }}>
-            {r.tid.toUpperCase()} · {r.smaker} SMAKER <span style={{ color: GM.rust, opacity: 1 }}>· LES →</span>
+            {r.tid.toUpperCase()}{r.når ? ` · ${r.når.toUpperCase()}` : ''} · {r.smaker} SMAKER <span style={{ color: GM.rust, opacity: 1 }}>· LES →</span>
           </div>
         )}
       </div>
       {!mobil && (
         <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.18em', color: GM.ink, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
           <span>{r.tid.toUpperCase()}</span>
+          {r.når && <span style={{ opacity: 0.5 }}>{r.når.toUpperCase()}</span>}
           <span style={{ opacity: 0.5 }}>{r.smaker} SMAKER</span>
           <span style={{ marginTop: 10, color: GM.rust }}>LES →</span>
         </div>
@@ -397,7 +398,7 @@ function GMKortStempel({ r, onClick }) {
         <RecipeBilde r={r} size={220} />
       </div>
       <div>
-        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, marginBottom: 6 }}>{r.kategori.toUpperCase()} &nbsp;·&nbsp; {r.tid.toUpperCase()}</div>
+        <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.rust, marginBottom: 6 }}>{r.kategori.toUpperCase()}{r.protein ? ` · ${r.protein.toUpperCase()}` : ''} &nbsp;·&nbsp; {r.tid.toUpperCase()}</div>
         <h3 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 28, lineHeight: 1, margin: 0, color: GM.ink, fontStyle: 'italic' }}>{r.navn}</h3>
       </div>
     </article>
@@ -849,13 +850,15 @@ function GMOppskrift({ recipes, id, onBack }) {
             <div style={{ height: mobil ? 20 : 30 }} />
             <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.8, lineHeight: 1.55, maxWidth: 520, margin: 0 }}>{r.ingress}</p>
             <GMRule mt={mobil ? 28 : 40} mb={mobil ? 16 : 20} />
-            <div style={{ display: 'grid', gridTemplateColumns: mobil ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: mobil ? 14 : 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: mobil ? 'repeat(2, 1fr)' : 'repeat(6, 1fr)', gap: mobil ? 14 : 20 }}>
               {[
                 ['Tid', r.tid],
                 ['Porsjoner', r.porsjoner + ' stk'],
                 ['Smak', r.smak],
                 ['Smaker', r.smaker],
-              ].map(([k, v]) => (
+                r.når && ['Når', r.når],
+                r.protein && ['Protein', r.protein],
+              ].filter(Boolean).map(([k, v]) => (
                 <div key={k}>
                   <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: GM.ink, opacity: 0.5, marginBottom: 6 }}>{k.toUpperCase()}</div>
                   <div style={{ fontFamily: '"Libre Caslon Text", serif', fontSize: mobil ? 16 : 18, color: GM.ink, fontStyle: 'italic' }}>{v}</div>
