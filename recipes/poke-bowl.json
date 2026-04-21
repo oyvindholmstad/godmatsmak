@@ -1,0 +1,71 @@
+{
+  "id": "poke-bowl",
+  "nr": "№ 06",
+  "navn": "Poké-bolle med laks og mango",
+  "undertittel": "Fredagstacoen tok seg en ferie til Hawaii og kom tilbake som noe helt annet",
+  "kategori": "middagsmak",
+  "når": "helgesmak",
+  "protein": "fiskesmak",
+  "tid": "45 min",
+  "porsjoner": 4,
+  "vanskelighet": "Middels",
+  "smaker": 8,
+  "smak": "Salt, syrlig, søt, umami, litt hot",
+  "ingress": "Poké (uttales poh-kay) er Hawaii med japansk aksent: råmarinert fisk på ris, med så mange tilbehør som du orker. Den er fredagsmat for folk som ikke gidder å spise taco igjen, og den kan bygges om etter smak, sesong og hva som ligger i kjøleskapet. Sett frem bollene på bordet og la gjestene stable sin egen.",
+  "bilde": "recipes/images/poke-bowl.jpg",
+  "ingredienser": [
+    {
+      "gruppe": "Fisk og ris",
+      "rader": [
+        { "m": 600, "e": "g", "n": "laksefilet, i terninger på 2 cm" },
+        { "m": 300, "e": "g", "n": "sushiris" }
+      ]
+    },
+    {
+      "gruppe": "Marinade",
+      "rader": [
+        { "m": 1, "e": "dl", "n": "soyasaus" },
+        { "m": 0.25, "e": "dl", "n": "riseddik" },
+        { "m": 1, "e": "ts", "n": "sesamolje" },
+        { "m": 0.25, "e": "ts", "n": "sitronsaft" },
+        { "m": 1, "e": "ts", "n": "rød chili, finhakket" },
+        { "m": 1, "e": "fedd", "n": "hvitløk, finhakket" },
+        { "m": 1, "e": "ts", "n": "fersk ingefær, finrevet" }
+      ]
+    },
+    {
+      "gruppe": "Tilbehør",
+      "rader": [
+        { "m": 1, "e": "stk", "n": "mango, i terninger" },
+        { "m": 4, "e": "stk", "n": "vårløk, i tynne skiver" },
+        { "m": 2, "e": "stk", "n": "avokado, i skiver" },
+        { "m": 2, "e": "never", "n": "edamamebønner" },
+        { "m": 0.5, "e": "stk", "n": "agurk, i skiver" },
+        { "m": 2, "e": "ss", "n": "sesamfrø, ristet" }
+      ]
+    },
+    {
+      "gruppe": "Syltet rødløk (1 stort glass)",
+      "rader": [
+        { "m": 6, "e": "stk", "n": "rødløk, i tynne skiver" },
+        { "m": 2, "e": "dl", "n": "7 % eddik" },
+        { "m": 4, "e": "dl", "n": "sukker" },
+        { "m": 6, "e": "dl", "n": "vann" }
+      ]
+    }
+  ],
+  "steg": [
+    { "t": "Sylt rødløken", "d": "Legg rødløkskivene i et rent glass. Kok opp eddik, sukker og vann til sukkeret er oppløst. Hell den varme lagen over løken slik at alt er dekket. La stå i minst 30 min — helst lenger. Den blir bare bedre over natten." },
+    { "t": "Kok risen", "d": "Kok sushiris etter anvisningen på pakken. Hopp over riseddik og sukker denne gangen — marinaden og tilbehørene tar over den jobben." },
+    { "t": "Rør marinaden", "d": "Pisk sammen alt til marinaden. Smak deg frem: salt fra soya, syrlig fra riseddik og sitron, nøttete fra sesam, varme fra chili og ingefær. Hvis én smak dominerer, demp den ned." },
+    { "t": "Mariner fisken", "d": "Skjær laksen i 2 cm terninger. Hell halvparten av marinaden over og bland godt. La fisken trekke i 10 min mens du gjør klar resten. Lenger enn det begynner sitronsaften å \"koke\" fisken som ceviche." },
+    { "t": "Rist sesamfrøene", "d": "Tørrist sesamfrøene i en kald stekepanne på middels varme. De er ferdige når de begynner å lukte og hoppe litt — ett minutt for mye, og de er brent." },
+    { "t": "Bygg bollene", "d": "Fordel lunken eller kald ris i fire boller. Legg grønnsaker, mango og avokado rundt kanten som en klokke. Legg laksen midt på. Topp med syltet rødløk og sesamfrø. Server med resten av marinaden ved siden av." }
+  ],
+  "servering": "Er du i korianderleiren, strø over en god neve frisk koriander på toppen. Vil du ha mer tyngde, rør sammen en chilimajones som ekstra saus.",
+  "par": "Kald pils, eller en tørr riesling hvis du vil matche den syltete løken.",
+  "kilde": {
+    "tekst": "Trines matblogg",
+    "lenke": "https://trinesmatblogg.no/recipe/pokebolle-med-laks-og-syltet-rodlok/"
+  }
+}
