@@ -1,0 +1,198 @@
+{
+  "id": "kungpao-kylling",
+  "nr": "№ 07",
+  "navn": "Kungpao-kylling",
+  "undertittel": "Sichuan-klassikeren der pepperen nummer leppene og peanøttene knaser mellom tennene",
+  "bilde": "recipes/images/kungpao-kylling.jpg",
+  "kategori": "middagsmak",
+  "når": "helgesmak",
+  "protein": "fuglesmak",
+  "tid": "45 min",
+  "porsjoner": 4,
+  "vanskelighet": "Middels",
+  "smaker": 9,
+  "smak": "Salt, syrlig, søt, hot, nummen",
+  "ingress": "Gong Bao Ji Ding — kylling i terninger, velvetert til silkemyk, woket sammen med tørket chili, sichuanpepper og peanøtter. Sausen er balansert mellom syrlig Shanxi-eddik og sukker, og pepperen gjør det den skal: får leppene til å dirre litt.",
+  "ingredienser": [
+    {
+      "gruppe": "Kylling og velveting",
+      "rader": [
+        {
+          "m": 600,
+          "e": "g",
+          "n": "kyllinglår, utbeinet og skåret i 1 cm terninger"
+        },
+        {
+          "m": 0.25,
+          "e": "ts",
+          "n": "salt"
+        },
+        {
+          "m": 60,
+          "e": "ml",
+          "n": "vann eller kyllingkraft"
+        },
+        {
+          "m": 1,
+          "e": "ss",
+          "n": "maisstivelse"
+        },
+        {
+          "m": 1,
+          "e": "ss",
+          "n": "nøytral olje"
+        }
+      ]
+    },
+    {
+      "gruppe": "Wok",
+      "rader": [
+        {
+          "m": 1,
+          "e": "dl",
+          "n": "nøytral olje (til frityr)"
+        },
+        {
+          "m": 1.5,
+          "e": "ss",
+          "n": "sichuanpepper (hua jiao)"
+        },
+        {
+          "m": 0.6,
+          "e": "dl",
+          "n": "tørket chili, hel"
+        },
+        {
+          "m": 1,
+          "e": "ts",
+          "n": "chiliflak (valgfritt)"
+        },
+        {
+          "m": 1,
+          "e": "ss",
+          "n": "purre, finhakket"
+        },
+        {
+          "m": 1,
+          "e": "ss",
+          "n": "ingefær, finhakket"
+        },
+        {
+          "m": 1,
+          "e": "ss",
+          "n": "hvitløk, finhakket"
+        },
+        {
+          "m": 0.5,
+          "e": "stk",
+          "n": "rød (eller grønn) paprika, i terninger"
+        }
+      ]
+    },
+    {
+      "gruppe": "Saus",
+      "rader": [
+        {
+          "m": 1,
+          "e": "ts",
+          "n": "kinesisk risvin (valgfritt)"
+        },
+        {
+          "m": 1.5,
+          "e": "ss",
+          "n": "Shanxi-riseddik (eller vanlig riseddik)"
+        },
+        {
+          "m": 1,
+          "e": "ts",
+          "n": "mørk soyasaus"
+        },
+        {
+          "m": 1.5,
+          "e": "ss",
+          "n": "lys soyasaus"
+        },
+        {
+          "m": 0.25,
+          "e": "ts",
+          "n": "salt"
+        },
+        {
+          "m": 0.25,
+          "e": "ts",
+          "n": "hvit pepper"
+        },
+        {
+          "m": 1.5,
+          "e": "ss",
+          "n": "sukker"
+        },
+        {
+          "m": 2,
+          "e": "ss",
+          "n": "vann"
+        },
+        {
+          "m": 2,
+          "e": "ts",
+          "n": "maisstivelse"
+        }
+      ]
+    },
+    {
+      "gruppe": "Til slutt",
+      "rader": [
+        {
+          "m": 5,
+          "e": "ss",
+          "n": "ristede peanøtter"
+        }
+      ]
+    },
+    {
+      "gruppe": "Til servering",
+      "rader": [
+        {
+          "m": 4,
+          "e": "dl",
+          "n": "ris"
+        }
+      ]
+    }
+  ],
+  "steg": [
+    {
+      "t": "Velvet kyllingen",
+      "d": "Bland kyllingterningene med salt. Tilsett vann eller kraft litt etter litt mens du masserer det inn i kjøttet — det skal suge alt opp. Strø over maisstivelsen og vend til alle bitene er jevnt dekket. Vend til slutt inn skjeen med olje. Velvetingen er det som gjør at kyllingen blir silkemyk i stedet for tørr."
+    },
+    {
+      "t": "Bland sausen",
+      "d": "Visp sammen risvin, Shanxi-eddik, mørk og lys soya, salt, hvit pepper, sukker, vann og maisstivelse i en liten bolle. Sett ved siden av woken — alt går fort fra nå."
+    },
+    {
+      "t": "Forhåndskok kyllingen",
+      "d": "Varm rikelig med olje i woken til 120 °C — lavere enn du tror. Slipp kyllingbitene i og rør dem fra hverandre med spisepinner eller en sleiv. Etter ca. 1 minutt er overflaten satt, men kyllingen er ikke gjennomstekt. Sil av og sett til side. Den lave temperaturen er hele poenget — for høy varme tørker ut det velvetede skallet."
+    },
+    {
+      "t": "Infuser oljen",
+      "d": "Tøm woken og varm 1–2 ss av oljen på nytt. Slipp i sichuanpepperen og la den infusere i ca. 15 sekunder, til den dufter blomstrete og litt sitrusaktig. Fisk pepperen ut og kast den — vi vil ha aromaen, ikke kornene mellom tennene. Slipp tørket chili oppi og rør i 5 sekunder."
+    },
+    {
+      "t": "Wok aromatene",
+      "d": "Tilsett chiliflak om du bruker det, og rør 2 sekunder. Inn med purre, ingefær, hvitløk og paprika, og wok i 1 minutt til alt dufter. Vend kyllingen tilbake i woken og rør i 1 minutt."
+    },
+    {
+      "t": "Sausen i",
+      "d": "Rør sausen en gang til (maisstivelsen synker), hell den over og vend godt. Den skal tykne og legge seg som en glasur rundt hver bit i løpet av sekunder."
+    },
+    {
+      "t": "Peanøtter og server",
+      "d": "Vend inn peanøttene helt til slutt, slik at de fortsatt knaser. Server umiddelbart med dampet ris."
+    }
+  ],
+  "servering": "Med en haug dampet jasminris og kanskje noe grønt og friskt ved siden av — agurk i skiver med litt riseddik og noen dråper sesamolje holder lenge.",
+  "par": "En lett pils som kan kjøle ned pepperen, eller en off-dry riesling om du vil møte syrligheten i sausen med litt sødme.",
+  "kilde": {
+    "tekst": "The Hutong Kitchen"
+  }
+}

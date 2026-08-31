@@ -1,0 +1,74 @@
+{
+  "id": "posjerte-egg",
+  "nr": "№ 08",
+  "navn": "Posjerte egg",
+  "undertittel": "Trikset er å la eggene ligge i eddik før de treffer vannet — da holder de formen hver eneste gang",
+  "bilde": "recipes/images/posjerte-egg.jpg",
+  "kategori": "frokostsmak",
+  "når": "hverdagssmak",
+  "protein": "vegetarsmak",
+  "tid": "15 min",
+  "porsjoner": 4,
+  "vanskelighet": "Enkel",
+  "smaker": 4,
+  "smak": "Mildt, syrlig, fyldig",
+  "ingress": "Posjerte egg har rykte på seg for å være vanskelige, og det ryktet er ufortjent. Hemmeligheten er å la eggene bade i eddik i noen minutter først — syren setter hviten før den i det hele tatt møter vannet, så den ikke flyter ut i tynne tråder. Ingen virvel i kasserollen, ingen plastfolie, ingen sjanselek.",
+  "ingredienser": [
+    {
+      "gruppe": "Alt du trenger",
+      "rader": [
+        {
+          "m": 4,
+          "e": "stk",
+          "n": "egg"
+        },
+        {
+          "m": 1,
+          "e": "dl",
+          "n": "klar eddik 7 % (nok til å dekke bunnen av skåla)"
+        },
+        {
+          "m": 1,
+          "e": "ts",
+          "n": "salt (til kokevannet)"
+        }
+      ]
+    }
+  ],
+  "steg": [
+    {
+      "t": "Sett på vannet",
+      "d": "Kok opp en stor kasserolle med vann og salt det lett — jo større kasserolle, jo bedre. Mye vann betyr at temperaturen ikke faller når eggene går i. Eggene skal bare ligge i eddik i 3–4 minutter, så sørg for at vannet nesten koker før du går videre."
+    },
+    {
+      "t": "Eddik i skåla",
+      "d": "Fyll bunnen av en skål med eddik. Velg skål etter hvor mange egg du skal ha — en mummiskål tar fint fire."
+    },
+    {
+      "t": "Knekk eggene oppi",
+      "d": "Knekk alle eggene rett i eddiken, i samme skål. Drypp litt ekstra eddik over toppen for good measure."
+    },
+    {
+      "t": "La dem godgjøre seg",
+      "d": "3–4 minutter, maks 5. Syren setter overflaten på hviten, og det er derfor eggene holder formen når de går i vannet. Ligger de for lenge, begynner de å smake eddik."
+    },
+    {
+      "t": "Over i vannet",
+      "d": "Skru ned til vannet syder — små bobler, ingen fossekok. Hell eggene forsiktig ut av skåla og ned i kasserollen, alle sammen."
+    },
+    {
+      "t": "Syd i 3–5 minutter",
+      "d": "La dem ligge i ro. Hviten skal være fast, plommen fortsatt løs."
+    },
+    {
+      "t": "Fisk dem opp",
+      "d": "Ta eggene ut med en sil eller hullsleiv og la vannet renne av et øyeblikk før de serveres."
+    }
+  ],
+  "servering": "To retninger som begge funker: avokadomos på ristet brød med soltørket tomat oppå — fettet i avokadoen og syren i tomaten møter plomma på halvveien. Eller den klassiske: røykelaks og hollandaise, som gjør frokosten til en anledning. Ellers holder salt, pepper og godt brød lenge.",
+  "par": "Kaffe, om det er morgen. Et glass tørr cava om det er den slags frokost.",
+  "kilde": {
+    "tekst": "Tareq Taylor / Aftonbladet",
+    "lenke": "https://tv.aftonbladet.se/video/332868/tareq-taylor-tricket-som-gor-ditt-pocherade-agg-perfekt"
+  }
+}

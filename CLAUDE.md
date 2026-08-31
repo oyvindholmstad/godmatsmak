@@ -54,6 +54,7 @@ Tre klassifiserende felt på hver oppskrift. Alle verdier ender på `-smak` — 
 - `middagsmak` — hovedretter til middag
 - `suppesmak` — supper og gryter man spiser med skje
 - `dessertsmak` — søtt til slutt
+- `frokostsmak` — frokost og brunsj
 - `tilbehørsmak` — sider, salater, brød, sauser som står alene
 - `drikkesmak` — drikke, fra cocktails til varm sjokolade
 
