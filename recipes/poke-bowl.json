@@ -29,8 +29,8 @@
         { "m": 1, "e": "ts", "n": "sesamolje" },
         { "m": 0.25, "e": "ts", "n": "sitronsaft" },
         { "m": 1, "e": "ts", "n": "rød chili, finhakket" },
-        { "m": 1, "e": "fedd", "n": "hvitløk, finhakket" },
-        { "m": 1, "e": "ts", "n": "fersk ingefær, finrevet" }
+        { "m": 2, "e": "fedd", "n": "hvitløk, finrevet" },
+        { "m": 2, "e": "ts", "n": "fersk ingefær, finrevet" }
       ]
     },
     {
@@ -57,7 +57,7 @@
   "steg": [
     { "t": "Sylt rødløken", "d": "Legg rødløkskivene i et rent glass. Kok opp eddik, sukker og vann til sukkeret er oppløst. Hell den varme lagen over løken slik at alt er dekket. La stå i minst 30 min — helst lenger. Den blir bare bedre over natten." },
     { "t": "Kok risen", "d": "Kok sushiris etter anvisningen på pakken. Hopp over riseddik og sukker denne gangen — marinaden og tilbehørene tar over den jobben." },
-    { "t": "Rør marinaden", "d": "Pisk sammen alt til marinaden. Smak deg frem: salt fra soya, syrlig fra riseddik og sitron, nøttete fra sesam, varme fra chili og ingefær. Hvis én smak dominerer, demp den ned." },
+    { "t": "Rør marinaden", "d": "Rasp hvitløken og ingefæren fint — begge skal forsvinne inn i marinaden, ikke ligge der som biter. Rør sammen alt. Smak deg frem: salt fra soya, syrlig fra riseddik og sitron, nøttete fra sesam, varme fra chili og ingefær. Hvis én smak dominerer, demp den ned." },
     { "t": "Mariner fisken", "d": "Skjær laksen i 2 cm terninger. Hell halvparten av marinaden over og bland godt. La fisken trekke i 10 min mens du gjør klar resten. Lenger enn det begynner sitronsaften å \"koke\" fisken som ceviche." },
     { "t": "Rist sesamfrøene", "d": "Tørrist sesamfrøene i en kald stekepanne på middels varme. De er ferdige når de begynner å lukte og hoppe litt — ett minutt for mye, og de er brent." },
     { "t": "Bygg bollene", "d": "Fordel lunken eller kald ris i fire boller. Legg grønnsaker, mango og avokado rundt kanten som en klokke. Legg laksen midt på. Topp med syltet rødløk og sesamfrø. Server med resten av marinaden ved siden av." }
