@@ -228,6 +228,7 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
   const lenker = [
     { id: 'forside', n: 'Forside' },
     { id: 'oppskrifter', n: 'Oppskrifter' },
+    { id: 'filter', n: 'Filter' },
   ];
 
   return (
@@ -249,13 +250,17 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
         </div>
       )}
       <div ref={wrapRef} style={{ display: 'flex', gap: 8, alignItems: 'center', position: 'relative' }}>
-        {mobil && (
-          <button onClick={() => onNav(aktiv === 'forside' ? 'oppskrifter' : 'forside')} style={{
-            background: 'none', color: GM.ink, border: `1px solid ${GM.ink}`, cursor: 'pointer',
-            padding: '6px 12px', borderRadius: 999,
-            fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
-          }}>{aktiv === 'forside' ? 'Oppskrifter' : 'Forside'}</button>
-        )}
+        {mobil && (() => {
+          const i = lenker.findIndex(l => l.id === aktiv);
+          const neste = lenker[(Math.max(i, 0) + 1) % lenker.length];
+          return (
+            <button onClick={() => onNav(neste.id)} style={{
+              background: 'none', color: GM.ink, border: `1px solid ${GM.ink}`, cursor: 'pointer',
+              padding: '6px 12px', borderRadius: 999,
+              fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
+            }}>{neste.n}</button>
+          );
+        })()}
         <GMKjenningsmelodi />
         <button onClick={() => setSokOpen(o => !o)} aria-label="Søk oppskrift" style={{
           background: sokOpen ? GM.ink : 'none', color: sokOpen ? GM.cream : GM.ink,
@@ -280,6 +285,7 @@ function GMFooter({ onNav }) {
   const lenker = [
     { id: 'forside', n: 'Forside' },
     { id: 'oppskrifter', n: 'Oppskrifter' },
+    { id: 'filter', n: 'Filter' },
   ];
   return (
     <footer style={{ background: GM.ink, color: GM.cream, padding: mobil ? '40px 16px 28px' : '60px 40px 40px', marginTop: mobil ? 50 : 80 }}>
@@ -591,6 +597,201 @@ function GMOppskriftListe({ recipes, onOpen }) {
       </section>
       <div style={{ padding: mobil ? '0 16px' : '0 40px' }}>
         {recipes.map(r => (
+          <GMKortMinimal key={r.id} r={r} onClick={() => onOpen(r.id)} />
+        ))}
+      </div>
+      <div style={{ height: 60 }} />
+    </>
+  );
+}
+
+// ---------- filter ----------
+function tidTilMinutter(tid) {
+  const t = (tid || '').toLowerCase();
+  const h = Number(t.match(/(\d+)\s*t(?![a-zæøå])/)?.[1] || 0);
+  const m = Number(t.match(/(\d+)\s*min/)?.[1] || 0);
+  return h * 60 + m;
+}
+
+const TID_BOLKER = [
+  { id: 'kjapp', n: 'Under 30 min', test: v => v > 0 && v < 30 },
+  { id: 'middels', n: '30–60 min', test: v => v >= 30 && v <= 60 },
+  { id: 'lang', n: 'Over 1 time', test: v => v > 60 },
+];
+
+const FILTER_FELT = [
+  { felt: 'kategori', tittel: 'Hva slags rett' },
+  { felt: 'når', tittel: 'Når på uka' },
+  { felt: 'protein', tittel: 'Protein' },
+  { felt: 'vanskelighet', tittel: 'Vanskelighet' },
+];
+
+const TOMT_FILTER = { kategori: [], når: [], protein: [], vanskelighet: [], tid: [], smaker: 0 };
+
+function filtrerOppskrifter(recipes, f) {
+  return recipes.filter(r => {
+    for (const { felt } of FILTER_FELT) {
+      if (f[felt].length && !f[felt].includes(r[felt])) return false;
+    }
+    if (f.tid.length) {
+      const min = tidTilMinutter(r.tid);
+      const treff = TID_BOLKER.filter(b => f.tid.includes(b.id)).some(b => b.test(min));
+      if (!treff) return false;
+    }
+    if (f.smaker && (r.smaker || 0) < f.smaker) return false;
+    return true;
+  });
+}
+
+function antallValgt(f) {
+  return FILTER_FELT.reduce((n, { felt }) => n + f[felt].length, 0) + f.tid.length + (f.smaker ? 1 : 0);
+}
+
+function GMFilterKnapp({ valgt, antall, onClick, children }) {
+  const av = antall === 0;
+  return (
+    <button
+      onClick={onClick}
+      disabled={av && !valgt}
+      style={{
+        cursor: av && !valgt ? 'default' : 'pointer',
+        background: valgt ? GM.ink : 'transparent',
+        color: valgt ? GM.cream : GM.ink,
+        border: `1px solid ${GM.ink}`,
+        opacity: av && !valgt ? 0.3 : 1,
+        padding: '8px 14px',
+        fontFamily: '"JetBrains Mono", monospace',
+        fontSize: 11,
+        letterSpacing: '0.16em',
+        textTransform: 'uppercase',
+        display: 'inline-flex',
+        alignItems: 'baseline',
+        gap: 8,
+        transition: 'background 120ms ease, color 120ms ease',
+      }}
+    >
+      <span>{children}</span>
+      <span style={{ color: valgt ? GM.cream : GM.rust, opacity: valgt ? 0.6 : 1 }}>{antall}</span>
+    </button>
+  );
+}
+
+function GMFilterGruppe({ tittel, nr, children }) {
+  return (
+    <div style={{ marginBottom: 26 }}>
+      <div style={{ marginBottom: 12 }}>
+        <GMLabel nr={nr}>{tittel}</GMLabel>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{children}</div>
+    </div>
+  );
+}
+
+function GMFilter({ recipes, onOpen, filter, setFilter }) {
+  const mobil = useIsMobile();
+
+  const treff = React.useMemo(() => filtrerOppskrifter(recipes, filter), [recipes, filter]);
+
+  // How many recipes each option would leave, given the *other* active filters.
+  const tell = React.useCallback((felt, verdi) => {
+    const prøve = felt === 'smaker'
+      ? { ...filter, smaker: verdi }
+      : { ...filter, [felt]: [verdi] };
+    return filtrerOppskrifter(recipes, prøve).length;
+  }, [recipes, filter]);
+
+  const toggle = (felt, verdi) => setFilter(f => ({
+    ...f,
+    [felt]: f[felt].includes(verdi) ? f[felt].filter(v => v !== verdi) : [...f[felt], verdi],
+  }));
+
+  const verdierFor = (felt) => {
+    const sett = [...new Set(recipes.map(r => r[felt]).filter(Boolean))];
+    return sett.sort((a, b) => a.localeCompare(b, 'nb'));
+  };
+
+  const maksSmaker = Math.max(...recipes.map(r => r.smaker || 0));
+  const smakerTrinn = [0, 5, 7, 9].filter(v => v === 0 || v <= maksSmaker);
+  const valgte = antallValgt(filter);
+
+  return (
+    <>
+      <section style={{ padding: mobil ? '36px 16px 20px' : '60px 40px 30px' }}>
+        <GMLabel nr="§ 01">Finn smaken</GMLabel>
+        <h1 style={{ fontFamily: '"Libre Caslon Text", serif', fontWeight: 400, fontSize: 'clamp(48px, 11vw, 112px)', lineHeight: 0.9, margin: '24px 0 20px', color: GM.ink, letterSpacing: '-0.03em' }}>
+          Sorter etter <span style={{ fontStyle: 'italic', color: GM.rust }}>lyst</span>.
+        </h1>
+        <p style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: mobil ? 16 : 17, color: GM.ink, opacity: 0.75, lineHeight: 1.55, maxWidth: 560, margin: 0 }}>
+          Du vet hva du har lyst på. Du vet bare ikke hva det heter ennå.
+          Kryss av, så snevrer vi det inn sammen.
+        </p>
+        <GMRule mt={mobil ? 28 : 40} thick={2} />
+      </section>
+
+      <section style={{ padding: mobil ? '0 16px' : '0 40px' }}>
+        {FILTER_FELT.map(({ felt, tittel }, i) => (
+          <GMFilterGruppe key={felt} tittel={tittel} nr={`№ 0${i + 1}`}>
+            {verdierFor(felt).map(v => (
+              <GMFilterKnapp
+                key={v}
+                valgt={filter[felt].includes(v)}
+                antall={tell(felt, v)}
+                onClick={() => toggle(felt, v)}
+              >{v}</GMFilterKnapp>
+            ))}
+          </GMFilterGruppe>
+        ))}
+
+        <GMFilterGruppe tittel="Hvor lang tid" nr="№ 05">
+          {TID_BOLKER.map(b => (
+            <GMFilterKnapp
+              key={b.id}
+              valgt={filter.tid.includes(b.id)}
+              antall={filtrerOppskrifter(recipes, { ...filter, tid: [b.id] }).length}
+              onClick={() => toggle('tid', b.id)}
+            >{b.n}</GMFilterKnapp>
+          ))}
+        </GMFilterGruppe>
+
+        <GMFilterGruppe tittel="Minst antall smaker" nr="№ 06">
+          {smakerTrinn.map(v => (
+            <GMFilterKnapp
+              key={v}
+              valgt={filter.smaker === v && v !== 0}
+              antall={tell('smaker', v)}
+              onClick={() => setFilter(f => ({ ...f, smaker: v }))}
+            >{v === 0 ? 'Alle' : `${v}+`}</GMFilterKnapp>
+          ))}
+        </GMFilterGruppe>
+      </section>
+
+      <section style={{ padding: mobil ? '10px 16px 0' : '20px 40px 0' }}>
+        <GMRule thick={2} mb={mobil ? 18 : 24} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: 14 }}>
+          <div style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: mobil ? 26 : 34, color: GM.ink }}>
+            {treff.length === recipes.length
+              ? <>Alle {recipes.length} smaker.</>
+              : <>{treff.length} {treff.length === 1 ? 'smak' : 'smaker'} igjen.</>}
+          </div>
+          {valgte > 0 && (
+            <button onClick={() => setFilter(TOMT_FILTER)} style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              fontFamily: '"JetBrains Mono", monospace', fontSize: 11,
+              letterSpacing: '0.22em', color: GM.rust, textTransform: 'uppercase',
+            }}>× Nullstill ({valgte})</button>
+          )}
+        </div>
+      </section>
+
+      <div style={{ padding: mobil ? '10px 16px 0' : '16px 40px 0' }}>
+        {treff.length === 0 ? (
+          <div style={{ padding: mobil ? '40px 0 20px' : '60px 0 30px', maxWidth: 520 }}>
+            <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, letterSpacing: '0.3em', color: GM.rust }}>TOM TALLERKEN</div>
+            <p style={{ fontFamily: '"Libre Caslon Text", serif', fontStyle: 'italic', fontSize: mobil ? 22 : 28, color: GM.ink, lineHeight: 1.25, marginTop: 14 }}>
+              Ingenting passer alt du ba om. Slipp opp på ett av kravene, så finner vi noe.
+            </p>
+          </div>
+        ) : treff.map(r => (
           <GMKortMinimal key={r.id} r={r} onClick={() => onOpen(r.id)} />
         ))}
       </div>
@@ -977,12 +1178,14 @@ function parseHash(hash) {
   const [seg, id] = h.split('/');
   if (seg === 'oppskrift' && id) return { side: 'oppskrift', id };
   if (seg === 'oppskrifter') return { side: 'oppskrifter', id: null };
+  if (seg === 'filter') return { side: 'filter', id: null };
   return { side: 'forside', id: null };
 }
 
 function lagHash({ side, id }) {
   if (side === 'oppskrift' && id) return `#/oppskrift/${id}`;
   if (side === 'oppskrifter') return `#/oppskrifter`;
+  if (side === 'filter') return `#/filter`;
   return `#/`;
 }
 
@@ -1003,6 +1206,8 @@ function App() {
   const [filosofi, setFilosofi] = React.useState(null);
   const [sitatNr, setSitatNr] = React.useState(1);
   const [feil, setFeil] = React.useState(null);
+  const [filter, setFilter] = React.useState(TOMT_FILTER);
+  const [forrigeListe, setForrigeListe] = React.useState('oppskrifter');
 
   React.useEffect(() => {
     lastOppskrifter()
@@ -1041,9 +1246,11 @@ function App() {
   React.useEffect(() => {
     if (side === 'forside') document.title = 'God Matsmak — Mat som smaker';
     else if (side === 'oppskrifter') document.title = 'Alle oppskrifter — God Matsmak';
+    else if (side === 'filter') document.title = 'Filter — God Matsmak';
   }, [side]);
 
   const openOppskrift = (id) => {
+    if (side === 'filter' || side === 'oppskrifter') setForrigeListe(side);
     setOppskriftId(id);
     setSide('oppskrift');
     navigerTil({ side: 'oppskrift', id });
@@ -1057,19 +1264,20 @@ function App() {
       window.scrollTo(0, 0);
       return;
     }
-    setSide('oppskrifter');
-    navigerTil({ side: 'oppskrifter' });
+    setSide(forrigeListe);
+    navigerTil({ side: forrigeListe });
     window.scrollTo(0, 0);
   };
 
   const onNav = (s) => {
     if (s === 'forside') { setSide('forside'); navigerTil({ side: 'forside' }); window.scrollTo(0, 0); }
     else if (s === 'oppskrifter') { setSide('oppskrifter'); navigerTil({ side: 'oppskrifter' }); window.scrollTo(0, 0); }
+    else if (s === 'filter') { setSide('filter'); navigerTil({ side: 'filter' }); window.scrollTo(0, 0); }
   };
 
   return (
     <div>
-      <GMNav onNav={onNav} aktiv={side === 'oppskrift' ? 'oppskrifter' : side} recipes={recipes} onOpenOppskrift={openOppskrift} />
+      <GMNav onNav={onNav} aktiv={side === 'oppskrift' ? forrigeListe : side} recipes={recipes} onOpenOppskrift={openOppskrift} />
       {feil && <GMFeil melding={feil} />}
       {!feil && !recipes && <GMLaster />}
       {!feil && recipes && side === 'forside' && (
@@ -1083,6 +1291,9 @@ function App() {
       )}
       {!feil && recipes && side === 'oppskrifter' && (
         <GMOppskriftListe recipes={recipes} onOpen={openOppskrift} />
+      )}
+      {!feil && recipes && side === 'filter' && (
+        <GMFilter recipes={recipes} onOpen={openOppskrift} filter={filter} setFilter={setFilter} />
       )}
       {!feil && recipes && side === 'oppskrift' && (
         <GMOppskrift recipes={recipes} id={oppskriftId} onBack={tilbake} />
