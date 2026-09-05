@@ -228,7 +228,6 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
   const lenker = [
     { id: 'forside', n: 'Forside' },
     { id: 'oppskrifter', n: 'Oppskrifter' },
-    { id: 'filter', n: 'Filter' },
   ];
 
   return (
@@ -250,17 +249,20 @@ function GMNav({ onNav, aktiv = 'forside', recipes, onOpenOppskrift }) {
         </div>
       )}
       <div ref={wrapRef} style={{ display: 'flex', gap: 8, alignItems: 'center', position: 'relative' }}>
-        {mobil && (() => {
-          const i = lenker.findIndex(l => l.id === aktiv);
-          const neste = lenker[(Math.max(i, 0) + 1) % lenker.length];
-          return (
-            <button onClick={() => onNav(neste.id)} style={{
-              background: 'none', color: GM.ink, border: `1px solid ${GM.ink}`, cursor: 'pointer',
-              padding: '6px 12px', borderRadius: 999,
-              fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
-            }}>{neste.n}</button>
-          );
-        })()}
+        {mobil && (
+          <button onClick={() => onNav(aktiv === 'forside' ? 'oppskrifter' : 'forside')} style={{
+            background: 'none', color: GM.ink, border: `1px solid ${GM.ink}`, cursor: 'pointer',
+            padding: '6px 12px', borderRadius: 999,
+            fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
+          }}>{aktiv === 'forside' ? 'Oppskrifter' : 'Forside'}</button>
+        )}
+        <button onClick={() => onNav('filter')} style={{
+          background: aktiv === 'filter' ? GM.ink : 'none',
+          color: aktiv === 'filter' ? GM.cream : GM.ink,
+          border: `1px solid ${GM.ink}`, cursor: 'pointer',
+          padding: mobil ? '6px 12px' : '6px 14px', borderRadius: 999,
+          fontFamily: '"Space Grotesk", sans-serif', fontSize: 12,
+        }}>Filter</button>
         <GMKjenningsmelodi />
         <button onClick={() => setSokOpen(o => !o)} aria-label="Søk oppskrift" style={{
           background: sokOpen ? GM.ink : 'none', color: sokOpen ? GM.cream : GM.ink,
