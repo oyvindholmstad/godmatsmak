@@ -470,12 +470,14 @@ function GMHero({ antall }) {
           </p>
         </div>
         {!mobil && <div style={{ width: 1, alignSelf: 'stretch', background: GM.ink, opacity: 0.2 }} />}
-        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ position: 'absolute', top: mobil ? -10 : -20, right: mobil ? 0 : -10, transform: 'rotate(12deg)', zIndex: 1 }}>
-            <IllStempel tall="✓" tekst="GOD SMAK" size={mobil ? 84 : 120} />
+        {!mobil && (
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ position: 'absolute', top: -20, right: -10, transform: 'rotate(12deg)', zIndex: 1 }}>
+              <IllStempel tall="✓" tekst="GOD SMAK" size={120} />
+            </div>
+            <img src="images/godmatsmak-logo.png" alt="God Matsmak" width={340} height={340} style={{ display: 'block', width: 340, height: 'auto' }} />
           </div>
-          <img src="images/godmatsmak-logo.png" alt="God Matsmak" width={mobil ? 240 : 340} height={mobil ? 240 : 340} style={{ display: 'block', width: mobil ? 240 : 340, height: 'auto' }} />
-        </div>
+        )}
       </div>
       <GMRule mt={mobil ? 30 : 50} thick={2} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0 }}>
